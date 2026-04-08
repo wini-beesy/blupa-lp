@@ -1,0 +1,1215 @@
+import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import './App.css'
+
+const LOGO_SRC = '/Midia Blupa/logo.svg'
+
+const HERO_SLIDES = [
+  'Property 1=Home - cinema.png',
+  'Property 1=Home - automovel.png',
+  'Property 1=Home - marketplace.png',
+  'Property 1=Home - lazer.png',
+  'Property 1=Home - pet.png',
+  'Property 1=Home - mercado.png',
+].map((f) => encodeURI(`/Midia Blupa/video/${f}`))
+
+const sectionAsset = (file: string) =>
+  encodeURI(`/Midia Blupa/Primeira seção/${file}`)
+
+const SECTION_TODO_DIA_IMG_TOP = sectionAsset('envato-labs-image-edit (1).png')
+const SECTION_TODO_DIA_IMG_COUPLE = sectionAsset(
+  'chinese-couple-using-laptop-and-credit-card-2026-03-24-14-13-49-utc.jpg',
+)
+const SECTION_TODO_DIA_IMG_KEYS = sectionAsset(
+  'young-woman-in-white-official-clothes-stands-in-fr-2026-01-08-23-29-06-utc 2.png',
+)
+
+const section2Asset = (file: string) =>
+  encodeURI(`/Midia Blupa/Segunda seção/${file}`)
+
+const SECTION_BRANDS_BANNER = encodeURI(
+  '/Midia Blupa/Terceira seção- banner/E108FGI5 1.png',
+)
+
+const quartaAsset = (file: string) =>
+  encodeURI(`/Midia Blupa/Quarta seção/${file}`)
+
+const quintaAsset = (file: string) =>
+  encodeURI(`/Midia Blupa/Quinta seção/${file}`)
+
+const sextaAsset = (file: string) =>
+  encodeURI(`/Midia Blupa/Sexta seção/${file}`)
+
+const sétimaAsset = (file: string) =>
+  encodeURI(`/Midia Blupa/Sétima seção/${file}`)
+
+const FAQ_ITEMS = [
+  {
+    question: 'O Blupa tem custo adicional?',
+    answer:
+      'Não. O Blupa é um benefício incluído no seu plano sem nenhum custo extra. Basta ativar o seu cadastro e começar a aproveitar.',
+  },
+  {
+    question: 'Posso usar quantas vezes quiser?',
+    answer:
+      'Sim! Não há limite de uso. Você pode acessar os benefícios e estabelecimentos parceiros sempre que precisar.',
+  },
+  {
+    question: 'Preciso baixar aplicativo?',
+    answer:
+      'Não é necessário. O Blupa funciona diretamente pelo navegador do seu celular ou computador, sem precisar instalar nada.',
+  },
+]
+
+const TIMELINE_STEPS = [
+  {
+    title: '1. Cadastre',
+    description:
+      'Faça sua inscrição em poucos minutos. É simples, rápido e digital.',
+    image: quintaAsset('Group 1.png'),
+    accent: '#C5CE38',
+  },
+  {
+    title: '2. Explore os benefícios',
+    description:
+      'Acesse o clube e conheça todas as vantagens exclusivas disponíveis em um só lugar.',
+    image: quintaAsset('Group 2.png'),
+    accent: '#8A38F5',
+  },
+  {
+    title: '3. Use no seu tempo',
+    description:
+      'Aproveite descontos e vantagens quando fizer sentido para você, no seu ritmo e sem pressa.',
+    image: quintaAsset('Group 3.png'),
+    accent: '#EA5045',
+  },
+] as const
+
+const PARTNER_CATEGORIES: readonly { label: string; image: string }[] = [
+  {
+    label: 'Automotivo',
+    image: quartaAsset(
+      'hand-holding-car-keys-selective-focus-woman-buyi-2026-03-19-07-09-09-utc.jpg',
+    ),
+  },
+  {
+    label: 'Beleza e Moda',
+    image: quartaAsset(
+      'flat-lay-with-woman-fashion-accessories-in-yellow-2026-03-23-23-04-18-utc.jpg',
+    ),
+  },
+  {
+    label: 'Casa e Decor',
+    image: quartaAsset(
+      'a-fragment-of-a-home-interior-a-light-chair-a-pict-2026-03-17-20-10-25-utc.jpg',
+    ),
+  },
+  {
+    label: 'Educação',
+    image: quartaAsset(
+      'graduation-girl-holding-her-diploma-with-pride-2026-01-09-14-53-49-utc.jpg',
+    ),
+  },
+  {
+    label: 'Entretenimento',
+    image: quartaAsset(
+      'stylish-man-in-black-jacket-piggybacking-happy-gir-2026-01-09-12-37-46-utc.jpg',
+    ),
+  },
+  {
+    label: 'Farmácia e Saúde',
+    image: quartaAsset(
+      'female-doctors-perform-disease-tests-and-provide-m-2026-03-16-06-05-07-utc.jpg',
+    ),
+  },
+  {
+    label: 'Gastronomia',
+    image: quartaAsset(
+      'bowl-with-chicken-pieces-rice-tomatoes-peppers-2026-03-25-09-50-04-utc.JPG',
+    ),
+  },
+  {
+    label: 'Lazer e Viagem',
+    image: quartaAsset('airplane-wing-in-the-sky-2026-03-17-08-12-22-utc.jpg'),
+  },
+  {
+    label: 'Petshop',
+    image: quartaAsset(
+      'cute-jack-russell-dog-sitting-in-shower-ready-for-2026-01-05-23-29-11-utc.jpg',
+    ),
+  },
+  {
+    label: 'Serviços',
+    image: quartaAsset(
+      'woman-relaxing-from-a-spa-treatment-2026-03-18-09-56-49-utc.jpg',
+    ),
+  },
+]
+
+type BenefitId = 'acesso' | 'organizado' | 'condicoes' | 'uso' | 'clube'
+
+const BENEFIT_QUEUE_INITIAL: BenefitId[] = [
+  'acesso',
+  'organizado',
+  'condicoes',
+  'uso',
+  'clube',
+]
+
+const BENEFIT_BY_ID: Record<
+  BenefitId,
+  { label: string; title: string; description: string; image: string }
+> = {
+  acesso: {
+    label: 'Acesso imediato a descontos',
+    title: 'Acesso imediato a descontos',
+    description:
+      'Ao entrar no Blupa, você passa a ter acesso a descontos e condições especiais com nossas marcas parceiras.',
+    image: section2Asset(
+      'business-woman-laptop-and-celebration-with-excite-2026-01-09-10-42-05-utc.jpg',
+    ),
+  },
+  organizado: {
+    label: 'Tudo organizado em um só lugar',
+    title: 'Tudo organizado em um só lugar',
+    description:
+      'Nada de procurar cupom, lembrar campanha ou esperar promoção. No Blupa, as vantagens ficam centralizadas, organizadas e fáceis de consultar sempre que você precisar.',
+    image: section2Asset(
+      'group-of-young-people-using-laptop-and-credit-card-2026-01-07-05-52-01-utc.jpg',
+    ),
+  },
+  condicoes: {
+    label: 'Condições exclusivas para membros',
+    title: 'Condições exclusivas para membros',
+    description:
+      'As ofertas do Blupa não são abertas ao público geral. São vantagens exclusivas para quem faz parte do clube, criadas a partir de parcerias estratégicas.',
+    image: section2Asset(
+      'multi-cultural-group-of-friends-with-laptop-and-cr-2026-01-05-23-00-01-utc.jpg',
+    ),
+  },
+  uso: {
+    label: 'Uso livre e recorrente',
+    title: 'Uso livre e recorrente',
+    description:
+      'Você pode acessar e aproveitar os benefícios sempre que quiser, de forma prática, respeitando as regras e condições específicas de cada parceiro.',
+    image: section2Asset(
+      'smiling-man-working-late-at-night-in-the-office-2026-03-26-10-23-12-utc.jpg',
+    ),
+  },
+  clube: {
+    label: 'Clube vivo, sempre atualizado',
+    title: 'Clube vivo, sempre atualizado',
+    description:
+      'Novas marcas, novas ofertas e novas vantagens entram constantemente. O Blupa evolui junto com a rotina e com as necessidades dos membros.',
+    image: section2Asset(
+      'smiling-student-videocalling-computer-at-evening-w-2026-03-11-01-01-15-utc.jpg',
+    ),
+  },
+}
+
+/** Frame Figma do hero (Ativo 4) — proporção e hint de dimensão intrínseca */
+const HERO_INTRINSIC_W = 1041
+const HERO_INTRINSIC_H = 919
+
+/** Desktop/H2 — Brand linear (Figma inspect) */
+const HERO_BRAND_TEXT_GRADIENT =
+  'linear-gradient(90.02deg, #FFCD00 0.87%, #EA5045 11.28%, #BA5B9E 24.36%, #8C4091 36.86%, #1D3B6E 48.63%, #2581C4 59.62%, #84D0F5 68.15%, #08B0A0 82.36%, #95C25D 94.29%)'
+
+/** Alinha com Figma (~100px em 1920px): padding horizontal fluido, sem caixa centrada */
+const SHELL_X =
+  'px-[clamp(1.25rem,5vw,6.25rem)] sm:px-[clamp(1.5rem,5.5vw,6.25rem)]'
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function ChevronDown({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M3 4.5L6 7.5L9 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function GradientBorderButton({
+  children,
+  className = '',
+  innerClassName = '',
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  innerClassName?: string
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      className={`blupa-gradient-ring rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
+      {...props}
+    >
+      <span
+        className={`block rounded-full bg-[#1A141F] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ${innerClassName}`}
+      >
+        {children}
+      </span>
+    </button>
+  )
+}
+
+/** Hero CTA — anel `blupa-gradient-ring` + interior escuro (hero) ou claro (secção branca); raio 24px (Figma). */
+function HeroGlassButton({
+  children,
+  className = '',
+  variant = 'dark',
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: ReactNode
+  variant?: 'dark' | 'light'
+}) {
+  const innerSkin =
+    variant === 'light'
+      ? 'bg-white text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.06)]'
+      : 'bg-[#1A141F] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
+  return (
+    <button
+      type="button"
+      className={`blupa-gradient-ring box-border flex h-14 w-full max-w-[16.9375rem] shrink-0 cursor-pointer rounded-[24px] border-none p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
+      {...props}
+    >
+      <span
+        className={`flex h-full min-h-0 w-full min-w-0 items-center justify-center rounded-[22.5px] px-6 font-sans text-base font-bold leading-[148%] ${innerSkin}`}
+      >
+        {children}
+      </span>
+    </button>
+  )
+}
+
+function TimelineAccordionChevron({ expanded }: { expanded: boolean }) {
+  return (
+    <svg
+      className={`h-5 w-5 text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${expanded ? 'rotate-180' : '-rotate-90'}`}
+      width="20"
+      height="20"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M3 4.5L6 7.5L9 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function PartnerFlipCard({ label, image }: { label: string; image: string }) {
+  return (
+    <div
+      className="partner-flip-card mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
+      tabIndex={0}
+      role="button"
+      aria-label={`${label}. Passe o rato ou o foco para ver a imagem da categoria.`}
+    >
+      <div className="partner-flip-inner">
+        <div className="partner-flip-face partner-flip-face--front">
+          <div className="blupa-gradient-ring box-border flex h-full w-full flex-col rounded-2xl p-[1.5px]">
+            <div className="flex h-full min-h-0 w-full items-center justify-center rounded-[calc(1rem-1.5px)] bg-white px-6 py-12">
+              <span className="text-center font-sans text-[22px] font-light leading-[144%] text-[#1A141F]">
+                {label}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="partner-flip-face partner-flip-face--back overflow-hidden">
+          <img
+            src={image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-black/45" aria-hidden />
+          <span className="absolute inset-0 z-[1] flex items-center justify-center px-6 text-center font-sans text-[22px] font-light leading-[144%] text-white">
+            {label}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}function rotateBenefitQueue(
+  prev: BenefitId[],
+  clickedSlotIndex: number,
+): BenefitId[] {
+  const clicked = prev[clickedSlotIndex + 1]
+  const previousFeatured = prev[0]
+  const before = prev.slice(1, clickedSlotIndex + 1)
+  const after = prev.slice(clickedSlotIndex + 2)
+  return [clicked, ...before, ...after, previousFeatured]
+}
+
+export default function App() {
+  const [scrolled, setScrolled] = useState(false)
+  const [heroSlide, setHeroSlide] = useState(0)
+  const [isClientePaco, setIsClientePaco] = useState(true)
+  const benefitsSectionRef = useRef<HTMLElement>(null)
+  const [benefitsInView, setBenefitsInView] = useState(false)
+  const [benefitQueue, setBenefitQueue] =
+    useState<BenefitId[]>(BENEFIT_QUEUE_INITIAL)
+  const [timelineStep, setTimelineStep] = useState(0)
+  const [faqOpen, setFaqOpen] = useState<number | null>(null)
+
+  const featuredId = benefitQueue[0]
+  const cardIds = benefitQueue.slice(1)
+  const featured = BENEFIT_BY_ID[featuredId]
+
+  const onBenefitCardClick = (slotIndex: number) => {
+    setBenefitQueue((q) => rotateBenefitQueue(q, slotIndex))
+  }
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setBenefitsInView(true)
+      return
+    }
+    const el = benefitsSectionRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setBenefitsInView(true)
+          obs.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.06 },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timer = setInterval(
+      () => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length),
+      3000,
+    )
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div id="top" className="landing landing-grain relative flex min-h-svh w-full min-w-0 flex-1 flex-col bg-[#120e16] text-white">
+      {/* Fundo com vaga tonalidade (Figma) */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_120%_80%_at_70%_20%,rgba(37,129,196,0.12),transparent_50%),radial-gradient(ellipse_90%_60%_at_10%_80%,rgba(140,64,145,0.1),transparent_45%)]"
+        aria-hidden
+      />
+
+      <div className="relative z-10 flex w-full min-w-0 flex-1 flex-col">
+        <div
+          className={`flex min-h-svh w-full min-w-0 flex-shrink-0 flex-col bg-[#1A141F] ${SHELL_X}`}
+        >
+        <header className={`landing-header blupa-sticky-header flex w-full min-w-0 shrink-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 ${scrolled ? 'blupa-sticky-header--scrolled py-3 sm:py-4' : 'pt-8 pb-6 sm:py-8 sm:pt-10 lg:py-10 lg:pt-12'}`}>
+          <a
+            href="#top"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            className="relative z-10 flex w-fit shrink-0 items-center no-underline transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98]"
+            aria-label="Blupa — início"
+          >
+            <img
+              src={LOGO_SRC}
+              alt="Blupa"
+              className="h-11 w-auto max-w-none shrink-0 object-contain object-left md:h-14"
+              width={145}
+              height={53}
+              decoding="async"
+            />
+          </a>
+
+          <nav
+            className="flex w-full min-w-0 items-center justify-center gap-6 text-sm font-medium text-white/85 sm:absolute sm:inset-x-0 sm:top-1/2 sm:z-0 sm:w-auto sm:-translate-y-1/2 sm:justify-center sm:gap-8 sm:px-32 md:text-base lg:gap-10"
+            aria-label="Principal"
+          >
+            <button
+              type="button"
+              onClick={() => scrollToSection('beneficios-blupa')}
+              className="group inline-flex cursor-pointer items-center gap-1 border-none bg-transparent p-0 font-bold text-inherit transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-white active:scale-[0.98]"
+            >
+              Benefícios
+              <ChevronDown className="text-[#84d0f5] opacity-90 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-180" />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('parceiros')}
+              className="group inline-flex cursor-pointer items-center gap-1 border-none bg-transparent p-0 font-bold text-inherit transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-white active:scale-[0.98]"
+            >
+              Parceiros
+              <ChevronDown className="text-[#84d0f5] opacity-90 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-180" />
+            </button>
+          </nav>
+
+          <div className="relative z-10 flex w-full items-center justify-end gap-3 sm:w-auto sm:shrink-0">
+            <a
+              href="https://clube.blupa.com.br/member/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="blupa-gradient-ring shrink-0 rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
+            >
+              <span className="block rounded-full bg-[#1A141F] px-5 py-2.5 font-sans text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:px-6 md:py-3 md:text-base">
+                Entrar
+              </span>
+            </a>
+            <GradientBorderButton
+              innerClassName="px-5 py-2.5 text-sm whitespace-nowrap md:px-6 md:py-3 md:text-base"
+              className="shrink-0"
+              onClick={() => scrollToSection('contato')}
+            >
+              Inscrição
+            </GradientBorderButton>
+          </div>
+        </header>
+
+        <main className="isolate flex w-full min-w-0 flex-1 flex-col items-stretch gap-10 overflow-x-clip pb-16 pt-4 sm:gap-12 md:gap-14 md:pb-20 md:pt-6 lg:min-h-0 lg:grid lg:grid-cols-[minmax(0,min(100%,40.0625rem))_minmax(0,1fr)] lg:items-center lg:gap-x-6 lg:gap-y-0 lg:overflow-x-visible lg:overflow-y-visible lg:pb-28 lg:pt-8 xl:gap-x-10">
+          {/*
+            Mobile: coluna (texto + ilustração). Desktop: grelha — texto ~641px + coluna da ilustração,
+            sem position:absolute no main (evita bloco de posicionamento errado e clipping estranho).
+          */}
+          <div className="relative z-20 flex w-full min-w-0 max-w-full flex-col items-start gap-8 text-left sm:gap-10 lg:max-w-none lg:gap-11 lg:pr-4 xl:pr-8">
+            <h1 className="landing-title landing-rise landing-rise-delay-1 max-w-[22ch] font-sans text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.02em] text-white sm:max-w-[min(100%,42rem)]">
+              Um clube de vantagens feito para o seu dia a dia.
+            </h1>
+
+            <p
+              className="landing-rise landing-rise-delay-2 max-w-full font-sans text-[clamp(1.125rem,2.2vw,1.875rem)] font-bold leading-[120%] tracking-[-0.01em]"
+              style={{
+                backgroundImage: HERO_BRAND_TEXT_GRADIENT,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              Benefícios que acompanham a sua vida.
+            </p>
+
+            <p className="landing-rise landing-rise-delay-3 max-w-[65ch] font-sans text-[clamp(1rem,2vw,1.375rem)] font-light leading-[1.55] text-white/88">
+              O Blupa reúne descontos, vantagens e ofertas exclusivas: tudo em
+              um só lugar, de forma simples, digital e acessível.
+            </p>
+
+            <div className="landing-rise landing-rise-delay-4 flex flex-row flex-wrap items-center gap-5">
+              <HeroGlassButton type="button" onClick={() => scrollToSection('contato')}>
+                Quero fazer parte do Blupa
+              </HeroGlassButton>
+            </div>
+          </div>
+
+          <div className="relative z-10 flex min-h-[220px] min-w-0 flex-1 items-center justify-center overflow-hidden sm:min-h-[280px] lg:pointer-events-none lg:col-start-2 lg:row-start-1 lg:flex lg:h-full lg:min-h-0 lg:items-end lg:justify-end lg:overflow-visible lg:pb-2">
+            <div
+              className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:ml-auto lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-none lg:translate-x-[min(12vw,7.5rem)]"
+              style={{ aspectRatio: `${HERO_INTRINSIC_W}/${HERO_INTRINSIC_H}` }}
+            >
+              {HERO_SLIDES.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  width={HERO_INTRINSIC_W}
+                  height={HERO_INTRINSIC_H}
+                  className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
+                    i === heroSlide ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  decoding="async"
+                />
+              ))}
+            </div>
+          </div>
+        </main>
+        </div>
+
+        <section
+          className="relative z-20 w-full flex-shrink-0 bg-white text-[#1F1E17]"
+          aria-labelledby="todo-dia-heading"
+        >
+          <div
+            className={`mx-auto flex w-full max-w-[1235px] flex-col items-stretch gap-12 py-14 sm:py-16 md:gap-14 md:py-20 lg:flex-row lg:items-start lg:justify-between lg:gap-[clamp(2.5rem,8vw,6.25rem)] xl:gap-[100px] ${SHELL_X}`}
+          >
+            <div className="flex w-full max-w-[539px] flex-col items-start gap-10 self-start sm:gap-14 lg:max-w-[539px] lg:gap-[60px]">
+              <h2
+                id="todo-dia-heading"
+                className="m-0 font-sans text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[128%] text-[#1F1E17] lg:text-[44px]"
+              >
+                Todo dia tem vantagem
+              </h2>
+              <div className="flex w-full max-w-[498px] flex-col gap-5 font-sans text-lg font-light leading-[132%] text-[#878680]">
+                <p>
+                  Quem faz parte do Blupa não espera ganhar desconto depois da
+                  compra. O desconto já está lá, disponível, antes da decisão. A
+                  vantagem faz parte do clube e acompanha você nas escolhas do
+                  dia a dia.
+                </p>
+                <p>
+                  Sempre que você for comprar algo, contratar um serviço ou
+                  aproveitar um momento de lazer, vale conferir o Blupa. As
+                  ofertas já estão ativas, prontas para usar, em marcas que você
+                  já conhece.
+                </p>
+              </div>
+              <div className="flex flex-row flex-wrap items-center gap-5">
+                <HeroGlassButton type="button" variant="light" onClick={() => scrollToSection('contato')}>
+                  Quero fazer parte do Blupa
+                </HeroGlassButton>
+              </div>
+            </div>
+
+            <div className="flex w-full max-w-[596px] shrink-0 flex-row items-center justify-center gap-0 self-center lg:max-w-none lg:flex-1 lg:justify-end">
+              <div className="relative h-[min(544px,78vw)] w-[min(100%,280px)] shrink-0 sm:h-[480px] sm:w-[260px] md:h-[520px] md:w-[270px] lg:h-[544px] lg:w-[280px]">
+                <img
+                  src={SECTION_TODO_DIA_IMG_TOP}
+                  alt="Pessoa a trabalhar com computador portátil, sorrindo."
+                  width={560}
+                  height={720}
+                  className="absolute inset-x-0 top-0 h-[min(66%,360px)] w-full rounded-tl-[70px] object-cover object-center sm:h-[58%]"
+                  decoding="async"
+                />
+                <img
+                  src={SECTION_TODO_DIA_IMG_COUPLE}
+                  alt="Casal no sofá a planear compras com cartão e portátil."
+                  width={500}
+                  height={310}
+                  className="absolute left-[15px] top-[71.5%] h-[28.5%] w-[250px] max-w-[calc(100%-30px)] object-cover object-center max-[380px]:left-2 max-[380px]:w-[min(250px,calc(100%-16px))]"
+                  decoding="async"
+                />
+              </div>
+              <div className="relative h-[min(544px,78vw)] w-[min(100%,316px)] shrink-0 sm:h-[480px] sm:w-[280px] md:h-[520px] md:w-[300px] lg:h-[544px] lg:w-[316px]">
+                <img
+                  src={SECTION_TODO_DIA_IMG_KEYS}
+                  alt="Mulher a mostrar chaves de carro, com veículo ao fundo."
+                  width={632}
+                  height={1088}
+                  className="absolute left-[5px] right-[15px] top-0 h-[99%] rounded-tr-[70px] object-cover object-center"
+                  decoding="async"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          ref={benefitsSectionRef}
+          id="beneficios-blupa"
+          className={`w-full bg-white text-[#1A141F] transition-[opacity,transform] duration-[950ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:duration-0 ${
+            benefitsInView
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-6 opacity-0 motion-reduce:translate-y-0 motion-reduce:opacity-100'
+          }`}
+          aria-labelledby="beneficios-blupa-heading"
+        >
+          <div
+            className={`mx-auto flex w-full max-w-[1240px] flex-col items-start gap-6 pb-16 pt-6 sm:pb-20 sm:pt-8 ${SHELL_X}`}
+          >
+            <h2
+              id="beneficios-blupa-heading"
+              className="m-0 font-sans text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[128%] text-[#1A141F] lg:text-[44px]"
+            >
+              Benefícios do Blupa
+            </h2>
+
+            <div className="blupa-gradient-ring w-full rounded-[24px] p-[1.5px]">
+              <div
+                key={featuredId}
+                className="benefits-feature-enter relative isolate min-h-[min(360px,72vw)] w-full overflow-hidden rounded-[22.5px] bg-[#1a141f] bg-cover bg-center sm:min-h-[420px] lg:h-[500px] lg:max-h-[500px]"
+                style={{
+                  backgroundImage: `url(${featured.image})`,
+                }}
+                role="region"
+                aria-live="polite"
+                aria-label={featured.title}
+              >
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[62%] bg-gradient-to-t from-black/80 via-black/45 to-transparent"
+                  aria-hidden
+                />
+                <div
+                  className="pointer-events-none absolute -bottom-8 -left-14 z-[1] h-[182px] w-[min(846px,130%)] rounded-full bg-neutral-500/[0.12] blur-[32px]"
+                  aria-hidden
+                />
+
+                <div className="relative z-[2] flex min-h-[min(360px,72vw)] flex-col justify-end sm:min-h-[420px] lg:min-h-0 lg:h-full lg:justify-end">
+                  <div key={featuredId} className="benefits-feature-text flex flex-col gap-3 px-6 pb-10 pt-16 sm:gap-4 sm:px-10 sm:pb-10 lg:pb-12">
+                    <h3 className="m-0 max-w-[28rem] font-sans text-[clamp(1.25rem,2.5vw,1.875rem)] font-bold leading-[120%] text-white lg:text-[30px] lg:leading-[120%]">
+                      {featured.title}
+                    </h3>
+                    <p className="m-0 max-w-[730px] font-sans text-base font-light leading-[148%] text-white">
+                      {featured.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+              aria-label="Outros benefícios"
+            >
+              {cardIds.map((id, slotIndex) => {
+                const b = BENEFIT_BY_ID[id]
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => onBenefitCardClick(slotIndex)}
+                    className="benefits-card-enter group relative isolate box-border flex min-h-[270px] w-full cursor-pointer flex-col items-center justify-center rounded-2xl border border-[#9D9D9C] bg-white px-6 py-12 text-center transition-[border-color,background-color,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-[#1A141F]/25 hover:bg-[#f7f7f6] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
+                  >
+                    <span className="m-0 max-w-[244px] font-sans text-[clamp(1.125rem,2vw,1.375rem)] font-bold leading-[124%] text-[#9D9D9C] transition-colors duration-300 group-hover:text-[#1A141F] lg:text-[22px]">
+                      {b.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="relative isolate w-full overflow-hidden lg:min-h-[852px]"
+          aria-labelledby="marcas-beneficios-heading"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 bg-[#ebeae8] bg-center bg-no-repeat [transform:scaleX(-1)]"
+            style={{
+              backgroundImage: `url(${SECTION_BRANDS_BANNER})`,
+              /* Menor que cover = mais campo visível (menos zoom). Ajuste o % se precisares. */
+              backgroundSize: '100%',
+            }}
+            aria-hidden
+          />
+          <div className="relative z-[1] flex min-h-[min(520px,88svh)] w-full flex-col justify-center lg:min-h-[852px]">
+            <div
+              className={`mx-auto flex w-full max-w-[1920px] flex-col items-start gap-[27px] px-[clamp(1.25rem,5vw,6.75rem)] pt-10 pb-14 sm:px-[clamp(1.5rem,5.5vw,6.75rem)] lg:pb-24 lg:pl-[108px] lg:pr-12 lg:pt-[7.25rem]`}
+            >
+              <h2
+                id="marcas-beneficios-heading"
+                className="m-0 max-w-[521px] font-sans text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[128%] text-[#1A141F] lg:text-[44px]"
+              >
+                Descontos nas marcas que fazem parte da sua vida
+              </h2>
+              <p className="m-0 max-w-[434px] font-sans text-base font-light leading-[148%] text-[#1A141F]">
+                No Blupa, essas marcas se transformam em benefícios prontos para
+                usar quando fizer sentido para você.
+              </p>
+              <div className="drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+                <HeroGlassButton type="button" variant="light" onClick={() => scrollToSection('contato')}>
+                  Quero fazer parte do Blupa
+                </HeroGlassButton>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="parceiros"
+          className="relative isolate w-full bg-white text-[#1A141F]"
+          aria-labelledby="parceiros-heading"
+        >
+          <div
+            className={`mx-auto flex w-full max-w-[1440px] flex-col items-center gap-12 pt-[100px] pb-16 md:pb-24 ${SHELL_X}`}
+          >
+            <h2
+              id="parceiros-heading"
+              className="m-0 w-full max-w-[1262px] text-center font-sans text-[clamp(2rem,5vw,2.75rem)] font-bold leading-[128%] lg:text-[44px] lg:leading-[128%]"
+            >
+              Parceiros
+            </h2>
+            <p className="m-0 w-full max-w-[1262px] text-center font-sans text-[clamp(1.125rem,2.5vw,1.375rem)] font-bold leading-[124%] lg:text-[22px] lg:leading-[27px]">
+              O Blupa reúne parceiros que fazem sentido na vida real:
+            </p>
+            <div className="flex w-full max-w-[1240px] flex-col gap-4">
+              <div className="grid w-full grid-cols-2 justify-items-center gap-x-2 gap-y-4 sm:grid-cols-3 md:grid-cols-5">
+                {PARTNER_CATEGORIES.map((c) => (
+                  <PartnerFlipCard
+                    key={c.label}
+                    label={c.label}
+                    image={c.image}
+                  />
+                ))}
+              </div>
+            </div>
+            <p className="m-0 w-full max-w-[1262px] text-center font-sans text-[clamp(1.125rem,2.5vw,1.375rem)] font-light leading-[144%] lg:text-[22px]">
+              Novos parceiros são adicionados constantemente para ampliar suas
+              vantagens.
+            </p>
+          </div>
+        </section>
+
+        <section
+          className="relative isolate w-full bg-white text-[#1F1E17]"
+          aria-labelledby="como-funciona-heading"
+        >
+          {/* Faixa escura: ~38% da largura — a coluna da imagem tem 46%, criando sobreposição natural */}
+          <div
+            className="pointer-events-none absolute left-0 top-1/2 z-0 hidden h-[754px] w-[604px] -translate-y-1/2 bg-[#1A141F] lg:block"
+            aria-hidden
+          />
+
+          <div className="relative z-[1] mx-auto flex w-full max-w-[1920px] flex-col lg:flex-row lg:items-center">
+            <div className="relative z-[1] flex w-full items-center justify-center bg-[#1A141F] px-6 py-16 sm:py-20 lg:w-[46%] lg:justify-end lg:bg-transparent lg:px-0 lg:py-[clamp(5rem,10vw,8.5rem)]">
+              <div className="timeline-image-glow relative w-full max-w-[min(683.71px,90vw)] shrink-0">
+                <img
+                  key={TIMELINE_STEPS[timelineStep].image}
+                  src={TIMELINE_STEPS[timelineStep].image}
+                  alt=""
+                  className="timeline-img-enter mx-auto block h-auto w-full max-w-full object-contain object-center"
+                  width={684}
+                  height={604}
+                  decoding="async"
+                />
+              </div>
+            </div>
+
+            <div className="relative z-[2] flex w-full flex-col justify-center bg-white px-6 py-14 sm:py-16 lg:flex-1 lg:py-[clamp(5rem,10vw,8.5rem)] lg:pl-[clamp(2rem,5vw,5.3125rem)] lg:pr-[clamp(1.5rem,4vw,2.5rem)]">
+              <div className="w-full max-w-[599.98px]">
+                  <h2
+                    id="como-funciona-heading"
+                    className="m-0 max-w-[509.84px] font-sans text-[clamp(2rem,5vw,2.75rem)] font-bold leading-[128%] text-[#1F1E17] lg:mb-[33px] lg:text-[44px] lg:leading-[128%]"
+                  >
+                    Como funciona
+                  </h2>
+
+                  <div className="flex flex-col gap-[19px] lg:min-h-[390px]">
+                    {TIMELINE_STEPS.map((step, index) => {
+                      const isOpen = timelineStep === index
+                      const panelId = `timeline-panel-${index}`
+                      const headingId = `timeline-heading-${index}`
+                      const accent = TIMELINE_STEPS[timelineStep].accent
+
+                      return (
+                        <div
+                          key={step.title}
+                          className="flex w-full max-w-[599.98px] flex-col gap-[22px]"
+                        >
+                          <button
+                            type="button"
+                            id={headingId}
+                            aria-expanded={isOpen}
+                            aria-controls={panelId}
+                            onClick={() => setTimelineStep(index)}
+                            className="relative flex h-20 w-full min-h-[80px] cursor-pointer items-center rounded-[10px] bg-[#F8F7F0] py-0 pl-[38px] pr-[10px] text-left transition-[background-color] duration-200 hover:bg-[#f0efe6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4] motion-reduce:transition-none"
+                          >
+                            <span className="min-w-0 flex-1 pr-[76px] font-sans text-[clamp(1rem,2.5vw,1.375rem)] font-bold leading-[124%] text-[#1F1E17] lg:text-[22px] lg:leading-[27px]">
+                              {step.title}
+                            </span>
+                            <span
+                              className="absolute right-[10px] top-1/2 flex h-[60px] w-[60px] shrink-0 -translate-y-1/2 items-center justify-center rounded-[10px] transition-colors duration-300 motion-reduce:transition-none"
+                              style={{ backgroundColor: accent }}
+                              aria-hidden
+                            >
+                              <TimelineAccordionChevron expanded={isOpen} />
+                            </span>
+                          </button>
+                          <div
+                            id={panelId}
+                            role="region"
+                            aria-labelledby={headingId}
+                            aria-hidden={!isOpen}
+                            className={`timeline-panel ${isOpen ? 'timeline-panel--open' : ''}`}
+                          >
+                            <p className="m-0 w-full max-w-[600px] font-sans text-[clamp(1rem,2.2vw,1.125rem)] font-light leading-[132%] text-[#1A141F] lg:text-[18px] lg:leading-[132%]">
+                              {step.description}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Sexta seção: Clientes do Grupo Paco ─────────────────────────── */}
+        <section
+          className="relative w-full bg-white"
+          aria-labelledby="clientes-heading"
+        >
+          {/* Container de posicionamento: relative + min-height para os cards absolutos */}
+          <div className="relative mx-auto w-full max-w-[1920px] lg:min-h-[1092px]">
+
+            {/* Flex: imagem + conteúdo (sem cards no desktop) */}
+            <div className="flex w-full flex-col lg:flex-row lg:items-start">
+
+              {/* Imagem — centrada verticalmente no desktop (top 120px = 11% de 1092px) */}
+              <div className="flex w-full shrink-0 items-center justify-end lg:w-[48.3%] lg:pt-[120px]">
+                <img
+                  src={sextaAsset('envato-labs-image-edit (2) 1.png')}
+                  alt=""
+                  className="block w-full max-w-full object-cover object-center lg:h-[852px] lg:w-[615px] lg:max-w-[615px]"
+                  width={615}
+                  height={852}
+                  decoding="async"
+                />
+              </div>
+
+              {/* Coluna de conteúdo (título / desc / contador) */}
+              <div className="flex flex-1 flex-col px-6 pb-10 pt-14 sm:pb-14 lg:pb-0 lg:pl-[clamp(2.5rem,6vw,6.625rem)] lg:pr-[clamp(1.5rem,4vw,4.75rem)] lg:pt-[167px]">
+
+                <h2
+                  id="clientes-heading"
+                  className="m-0 mb-4 max-w-[490px] font-sans text-[clamp(2rem,4vw,3.125rem)] font-semibold leading-[120%] text-[#04000B] lg:mb-[25px] lg:text-[50px]"
+                >
+                  Clientes do Grupo Paco
+                </h2>
+
+                <p className="m-0 mb-8 max-w-[502px] font-sans text-[clamp(1rem,1.8vw,1.125rem)] font-light leading-[132%] text-[#666666] lg:mb-10 lg:text-[18px]">
+                  Seu plano agora vai além. Além dos serviços que você já conhece,
+                  você passa a ter acesso a um clube completo de benefícios.
+                </p>
+
+                {/* Contador */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <span
+                    className="font-sans font-medium leading-none text-[#CC3159]"
+                    style={{ fontSize: 'clamp(3.5rem, 8vw, 6.25rem)' }}
+                  >
+                    +40mil
+                  </span>
+                  <span className="max-w-[251px] font-sans text-[clamp(0.875rem,1.2vw,1rem)] font-bold leading-[170%] text-[#04000B] lg:text-[16px]">
+                    estabelecimentos em todo o Brasil
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+            {/* ── Cards: absolute no desktop, sobrepoem a imagem ────────── */}
+            {/* Figma: left 850px / bottom 178px / right 312px em 1920×1092 */}
+            <div className="mx-6 mt-8 flex flex-col gap-5 pb-10 sm:mx-0 sm:flex-row sm:px-6 lg:absolute lg:mx-0 lg:flex-row lg:gap-[clamp(15px,1.6vw,30px)] lg:pb-0"
+              style={{
+                bottom: '16.27%',   /* 177.72/1092 */
+                left:   '44.29%',   /* 850.38/1920 */
+                right:  '16.25%',   /* 312/1920    */
+              }}
+            >
+              {/* Card 1 — Clientes Grupo Paco */}
+              <div className="flex flex-1 flex-col justify-start bg-[#1A141F] px-[50px] pb-[50px] pt-[50px]">
+                <p className="m-0 mb-3 font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
+                  Clientes Grupo Paco
+                </p>
+                <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/80 lg:text-[16px]">
+                  Seu plano agora vai além. Além dos serviços que você já conhece, você passa a ter acesso a um clube completo de benefícios.
+                </p>
+              </div>
+
+              {/* Card 2 — Não é cliente Grupo Paco */}
+              <div className="flex flex-1 flex-col justify-start bg-[#CC3159] px-[50px] pb-[50px] pt-[50px]">
+                <p className="m-0 mb-3 font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
+                  Não é cliente Grupo Paco?
+                </p>
+                <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/90 lg:text-[16px]">
+                  Sem problema!<br />
+                  Você também pode aproveitar tudo isso por apenas{' '}
+                  <strong className="font-bold text-white">R$19,90/mês</strong>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ── Sétima seção: Faça parte do Blupa (formulário) ───────────────── */}
+        <section
+          id="contato"
+          className="relative w-full overflow-hidden bg-[#E9F1EE]"
+          aria-labelledby="contato-heading"
+        >
+          {/* Imagem de fundo — lado direito (45% → 100%) */}
+          <div
+            className="absolute inset-y-0 right-0 hidden w-[55%] lg:block"
+            aria-hidden
+          >
+            <img
+              src={sétimaAsset(
+                'envio.jpg',
+              )}
+              alt=""
+              className="block h-full w-full object-cover object-right"
+              decoding="async"
+            />
+          </div>
+
+          {/* Card branco com formulário */}
+          <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 py-12 sm:py-16 lg:py-[60px] lg:pl-[312px] lg:pr-0">
+            <div className="w-full max-w-[992px] bg-white px-6 py-10 sm:px-12 sm:py-12 lg:px-[100px] lg:py-[60px]">
+
+              <form
+                className="flex w-full flex-col items-end gap-8"
+                noValidate
+              >
+                {/* Título */}
+                <h2
+                  id="contato-heading"
+                  className="m-0 w-full font-sans text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold leading-[128%] text-[#04000B] lg:text-[44px]"
+                >
+                  Desbloqueie os benefícios do Blupa
+                </h2>
+
+                {/* Toggle — É cliente Grupo Paco */}
+                <div className="flex w-full items-center gap-3">
+                  <span className="font-sans text-[16px] font-light leading-[148%] text-[#1A141F]">
+                    É cliente Grupo Paco
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={isClientePaco}
+                    onClick={() => setIsClientePaco((v) => !v)}
+                    className={`relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#08B0A0] ${isClientePaco ? 'bg-[#08B0A0]' : 'bg-[#D1D5DB]'}`}
+                  >
+                    {isClientePaco && (
+                      <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">
+                        Sim
+                      </span>
+                    )}
+                    <span
+                      className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isClientePaco ? 'left-[40px]' : 'left-[2px]'}`}
+                    />
+                  </button>
+                </div>
+
+                {/* Campos */}
+                <div className="flex w-full flex-col gap-[15px]">
+                  <input
+                    type="text"
+                    placeholder="Nome Sobrenome"
+                    className="h-[51px] w-full rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                  />
+                  <div className="flex gap-4">
+                    <input
+                      type="email"
+                      placeholder="seuemail@grupopaco.com.br"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Telefone"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                    />
+                  </div>
+                </div>
+
+                {/* CTA — gradient ring + interior branco */}
+                <div className="drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+                  <button
+                    type="submit"
+                    className="blupa-gradient-ring cursor-pointer rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
+                  >
+                    <span className="block rounded-full bg-white px-6 py-[14px] font-sans text-[16px] font-bold leading-[148%] text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.04)]">
+                      Ativar
+                    </span>
+                  </button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          {/* Imagem mobile (abaixo do formulário) */}
+          <div className="mt-0 h-64 w-full lg:hidden">
+            <img
+              src={sétimaAsset(
+                'website-header-of-cheerful-young-woman-in-sportswe-2026-01-09-01-22-27-utc 1.png',
+              )}
+              alt=""
+              className="block h-full w-full object-cover object-top"
+              decoding="async"
+            />
+          </div>
+        </section>
+
+        {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+        <section
+          className="w-full bg-white"
+          aria-labelledby="faq-heading"
+        >
+          <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 px-6 py-16 sm:py-20 lg:flex-row lg:items-start lg:justify-between lg:gap-[160px] lg:px-10 lg:py-[100px]">
+
+            {/* Coluna esquerda: título + CTA */}
+            <div className="flex shrink-0 flex-col items-start gap-6 lg:w-[414px] lg:items-center">
+              <h2
+                id="faq-heading"
+                className="m-0 w-full max-w-[339px] font-sans text-[clamp(1.5rem,3vw,1.875rem)] font-bold leading-[120%] text-[#1A141F] lg:text-[30px]"
+              >
+                Perguntas frequentes sobre o Blupa
+              </h2>
+
+              {/* Borda em gradiente: wrapper com blupa-gradient-ring + padding 2px */}
+              <div
+                className="blupa-gradient-ring rounded-[26px] p-[2px]"
+                style={{ filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.25))' }}
+              >
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('contato')}
+                  className="flex h-[52px] w-[267px] cursor-pointer items-center justify-center rounded-[24px] bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
+                >
+                  Quero fazer parte do Blupa
+                </button>
+              </div>
+            </div>
+
+            {/* Coluna direita: acordeão */}
+            <div className="flex w-full flex-col gap-4 lg:max-w-[701px] lg:gap-[16px]">
+              {FAQ_ITEMS.map((item, index) => {
+                const isOpen = faqOpen === index
+                const panelId = `faq-panel-${index}`
+                const headingId = `faq-heading-${index}`
+                return (
+                  <div
+                    key={item.question}
+                    className="w-full rounded-[8px] bg-white shadow-[0px_15px_30px_rgba(19,40,77,0.09)]"
+                  >
+                    <button
+                      type="button"
+                      id={headingId}
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setFaqOpen(isOpen ? null : index)}
+                      className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-[8px] px-6 py-6 text-left transition-colors duration-150 hover:bg-[#fafafa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#1A141F] motion-reduce:transition-none"
+                    >
+                      <span className="font-sans text-[clamp(1rem,1.8vw,1.125rem)] font-light leading-[132%] text-[#1A141F] opacity-[0.88] lg:text-[18px]">
+                        {item.question}
+                      </span>
+                      {/* Chevron */}
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden
+                        className={`shrink-0 text-[#1C1B1F] transition-transform duration-200 motion-reduce:transition-none ${isOpen ? 'rotate-180' : ''}`}
+                      >
+                        <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={headingId}
+                      aria-hidden={!isOpen}
+                      className={`faq-panel ${isOpen ? 'faq-panel--open' : ''}`}
+                    >
+                      <p className="m-0 px-6 pb-6 font-sans text-[clamp(0.875rem,1.6vw,1rem)] font-light leading-[160%] text-[#1A141F] opacity-75 lg:text-[16px]">
+                        {item.answer}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+          </div>
+        </section>
+
+        {/* ── Footer ───────────────────────────────────────────────────────── */}
+        <footer className="w-full bg-[#1A141F] px-6 py-16 sm:px-10 lg:px-6 lg:py-[64px]">
+      <div className="mx-auto flex w-full max-w-[1096px] flex-col gap-[42px]">
+
+        {/* Linha principal: logo+tagline | links */}
+        <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between lg:gap-[150px]">
+
+          {/* Coluna esquerda: logo + tagline */}
+          <div className="flex flex-col gap-16 lg:w-[408px]">
+            <img
+              src={LOGO_SRC}
+              alt="Blupa"
+              width={274}
+              height={100}
+              className="h-[100px] w-[274px] object-contain object-left"
+              decoding="async"
+            />
+            <div className="flex flex-col gap-6">
+              <p className="m-0 font-sans text-[18px] font-bold leading-[132%] text-white">
+                Blupa é o clube de benefícios do Grupo Paco
+              </p>
+              <p className="m-0 font-sans text-[18px] font-light leading-[132%] text-white">
+                Benefícios que fazem sentido na vida real.
+              </p>
+            </div>
+          </div>
+
+          {/* Coluna direita: links rápidos */}
+          <nav aria-label="Links rápidos">
+            <div className="flex flex-col gap-6 lg:w-[158px]">
+              <p className="m-0 font-sans text-[18px] font-bold leading-[132%] text-white">
+                Links rápidos
+              </p>
+              {[
+                { label: 'Home', href: '#top' },
+                { label: 'Benefícios', href: '#beneficios-blupa' },
+                { label: 'Parceiros', href: '#parceiros' },
+                { label: 'Inscrição', href: '#contato' },
+                { label: 'Políticas de privacidade', href: '#' },
+                { label: 'Termos de uso', href: '#' },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={
+                    href !== '#'
+                      ? (e) => {
+                          e.preventDefault()
+                          if (href === '#top') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                          } else {
+                            scrollToSection(href.slice(1))
+                          }
+                        }
+                      : undefined
+                  }
+                  className="font-sans text-[16px] font-light leading-[148%] text-white no-underline opacity-80 transition-opacity duration-200 hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        </div>
+
+        {/* Copyright */}
+        <div className="flex w-full items-center justify-center border-t border-white/10 pt-8">
+          <p className="m-0 text-center font-[Montserrat,sans-serif] text-[12px] font-normal leading-[140%] text-white">
+            © 2026 Blupa. Todos os direitos reservados.
+          </p>
+        </div>
+
+      </div>
+        </footer>
+
+      </div>
+    </div>
+  )
+}

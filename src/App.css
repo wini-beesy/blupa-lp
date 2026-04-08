@@ -1,0 +1,325 @@
+/* Landing: anel em gradiente (botões tipo “pill”) */
+.blupa-gradient-ring {
+  background: linear-gradient(
+    135deg,
+    #84d0f5 0%,
+    #2581c4 18%,
+    #8c4091 40%,
+    #ba5b9e 55%,
+    #ea5045 75%,
+    #ffcd00 100%
+  );
+}
+
+/* Taste-skill aligned: grain em camada fixa, só opacidade (GPU barato) */
+.landing-grain {
+  position: relative;
+}
+
+.landing-grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes landing-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.125rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes landing-float-soft {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -0.45rem, 0);
+    }
+  }
+
+  .landing-rise {
+    animation: landing-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .landing-rise-delay-1 {
+    animation-delay: 90ms;
+  }
+  .landing-rise-delay-2 {
+    animation-delay: 180ms;
+  }
+  .landing-rise-delay-3 {
+    animation-delay: 270ms;
+  }
+  .landing-rise-delay-4 {
+    animation-delay: 360ms;
+  }
+
+  .landing-hero-float {
+    animation: landing-float-soft 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-rise,
+  .landing-hero-float {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes benefits-feature-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.985) translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .benefits-feature-enter {
+    animation: benefits-feature-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes benefits-card-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.6rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .benefits-card-enter {
+    animation: benefits-card-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes benefits-feature-text {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .benefits-feature-text {
+    animation: benefits-feature-text 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefits-feature-enter,
+  .benefits-feature-text,
+  .benefits-card-enter {
+    animation: none;
+  }
+}
+
+/* Parceiros — cartão com flip 3D (hover / focus-visible) */
+.partner-flip-card {
+  perspective: 1400px;
+}
+
+.partner-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.partner-flip-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.partner-flip-face--back {
+  transform: rotateY(180deg);
+  background: #1a141f;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .partner-flip-card:hover .partner-flip-inner,
+  .partner-flip-card:focus-visible .partner-flip-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-flip-inner {
+    transition: none;
+  }
+
+  .partner-flip-face--back {
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .partner-flip-face--front {
+    transition: opacity 0.2s ease;
+  }
+
+  .partner-flip-card:hover .partner-flip-inner,
+  .partner-flip-card:focus-visible .partner-flip-inner {
+    transform: none;
+  }
+
+  .partner-flip-card:hover .partner-flip-face--front,
+  .partner-flip-card:focus-visible .partner-flip-face--front {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .partner-flip-card:hover .partner-flip-face--back,
+  .partner-flip-card:focus-visible .partner-flip-face--back {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Como funciona — imagem composta (Group 1–3) + sombra (Figma) */
+.timeline-image-glow {
+  filter: drop-shadow(0 10px 30px rgba(255, 255, 255, 0.3));
+}
+
+/* Como funciona — fade + slide da imagem ao trocar de passo */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes timeline-img-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 0.75rem, 0) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  .timeline-img-enter {
+    animation: timeline-img-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-img-enter {
+    animation: none;
+  }
+}
+
+/* Como funciona — painel de descrição com transição suave (grid trick) */
+.timeline-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-panel > p {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.timeline-panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-panel,
+  .timeline-panel--open {
+    transition: none;
+  }
+}
+
+/* FAQ — painel do acordeão com transição suave (grid trick) */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-panel > p {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faq-panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-panel,
+  .faq-panel--open {
+    transition: none;
+  }
+}
+
+/* Sticky header — margem negativa para fundo full-bleed + fundo scroll-aware */
+.blupa-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  margin-left: calc(-1 * clamp(1.25rem, 5vw, 6.25rem));
+  margin-right: calc(-1 * clamp(1.25rem, 5vw, 6.25rem));
+  padding-left: clamp(1.25rem, 5vw, 6.25rem);
+  padding-right: clamp(1.25rem, 5vw, 6.25rem);
+  transition:
+    background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    padding-top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    padding-bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .blupa-sticky-header {
+    margin-left: calc(-1 * clamp(1.5rem, 5.5vw, 6.25rem));
+    margin-right: calc(-1 * clamp(1.5rem, 5.5vw, 6.25rem));
+    padding-left: clamp(1.5rem, 5.5vw, 6.25rem);
+    padding-right: clamp(1.5rem, 5.5vw, 6.25rem);
+  }
+}
+
+.blupa-sticky-header--scrolled {
+  background-color: rgba(26, 20, 31, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
+}
