@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const LOGO_SRC = '/Midia Blupa/logo.svg'
@@ -67,14 +67,14 @@ const TIMELINE_STEPS = [
     description:
       'Faça sua inscrição em poucos minutos. É simples, rápido e digital.',
     image: quintaAsset('Group 1.png'),
-    accent: '#C5CE38',
+    accent: '#FFCD00',
   },
   {
     title: '2. Explore os benefícios',
     description:
       'Acesse o clube e conheça todas as vantagens exclusivas disponíveis em um só lugar.',
     image: quintaAsset('Group 2.png'),
-    accent: '#8A38F5',
+    accent: '#8C4091',
   },
   {
     title: '3. Use no seu tempo',
@@ -287,11 +287,11 @@ function HeroGlassButton({
   return (
     <button
       type="button"
-      className={`blupa-gradient-ring box-border flex h-14 w-full max-w-[16.9375rem] shrink-0 cursor-pointer rounded-[24px] border-none p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
+      className={`blupa-gradient-ring box-border flex w-full max-w-[16.9375rem] shrink-0 cursor-pointer rounded-[24px] border-none p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
       {...props}
     >
       <span
-        className={`flex h-full min-h-0 w-full min-w-0 items-center justify-center rounded-[22.5px] px-6 font-sans text-base font-bold leading-[148%] ${innerSkin}`}
+        className={`flex w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-4 font-sans text-base font-bold leading-[148%] ${innerSkin}`}
       >
         {children}
       </span>
@@ -320,7 +320,7 @@ function TimelineAccordionChevron({ expanded }: { expanded: boolean }) {
   )
 }
 
-function PartnerFlipCard({ label, image }: { label: string; image: string }) {
+function PartnerFlipCard({ label, image, objectPosition = 'center' }: { label: string; image: string; objectPosition?: string }) {
   return (
     <div
       className="partner-flip-card mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
@@ -343,6 +343,7 @@ function PartnerFlipCard({ label, image }: { label: string; image: string }) {
             src={image}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition }}
             loading="lazy"
             decoding="async"
           />
@@ -368,7 +369,10 @@ function PartnerFlipCard({ label, image }: { label: string; image: string }) {
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
   const [heroSlide, setHeroSlide] = useState(0)
-  const [isClientePaco, setIsClientePaco] = useState(true)
+  const [commEmail, setCommEmail] = useState(true)
+  const [commSms, setCommSms] = useState(true)
+  const [commWhatsapp, setCommWhatsapp] = useState(true)
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const benefitsSectionRef = useRef<HTMLElement>(null)
   const [benefitsInView, setBenefitsInView] = useState(false)
   const [benefitQueue, setBenefitQueue] =
@@ -380,8 +384,19 @@ export default function App() {
   const cardIds = benefitQueue.slice(1)
   const featured = BENEFIT_BY_ID[featuredId]
 
+  const autoRotateRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const startAutoRotate = useCallback(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (autoRotateRef.current) clearInterval(autoRotateRef.current)
+    autoRotateRef.current = setInterval(() => {
+      setBenefitQueue((q) => rotateBenefitQueue(q, 0))
+    }, 4000)
+  }, [])
+
   const onBenefitCardClick = (slotIndex: number) => {
     setBenefitQueue((q) => rotateBenefitQueue(q, slotIndex))
+    startAutoRotate()
   }
 
   useEffect(() => {
@@ -403,6 +418,17 @@ export default function App() {
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!benefitsInView) return
+    startAutoRotate()
+    return () => {
+      if (autoRotateRef.current) {
+        clearInterval(autoRotateRef.current)
+        autoRotateRef.current = null
+      }
+    }
+  }, [benefitsInView, startAutoRotate])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -478,12 +504,12 @@ export default function App() {
               rel="noopener noreferrer"
               className="blupa-gradient-ring shrink-0 rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
             >
-              <span className="block rounded-full bg-[#1A141F] px-5 py-2.5 font-sans text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:px-6 md:py-3 md:text-base">
+              <span className="block whitespace-nowrap rounded-full bg-[#1A141F] px-6 py-4 font-sans text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:text-base">
                 Entrar
               </span>
             </a>
             <GradientBorderButton
-              innerClassName="px-5 py-2.5 text-sm whitespace-nowrap md:px-6 md:py-3 md:text-base"
+              innerClassName="px-6 py-4 text-sm whitespace-nowrap md:text-base"
               className="shrink-0"
               onClick={() => scrollToSection('contato')}
             >
@@ -542,7 +568,9 @@ export default function App() {
                   className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
                     i === heroSlide ? 'opacity-100' : 'opacity-0'
                   }`}
-                  decoding="async"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={i === 0 ? 'high' : 'low'}
+                  decoding={i === 0 ? 'sync' : 'async'}
                 />
               ))}
             </div>
@@ -557,7 +585,7 @@ export default function App() {
           <div
             className={`mx-auto flex w-full max-w-[1235px] flex-col items-stretch gap-12 py-14 sm:py-16 md:gap-14 md:py-20 lg:flex-row lg:items-start lg:justify-between lg:gap-[clamp(2.5rem,8vw,6.25rem)] xl:gap-[100px] ${SHELL_X}`}
           >
-            <div className="flex w-full max-w-[539px] flex-col items-start gap-10 self-start sm:gap-14 lg:max-w-[539px] lg:gap-[60px]">
+            <div className="flex w-full max-w-[539px] flex-col items-start gap-10 self-start sm:gap-14 lg:max-w-none lg:flex-1 lg:gap-[60px]">
               <h2
                 id="todo-dia-heading"
                 className="m-0 font-sans text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[128%] text-[#1F1E17] lg:text-[44px]"
@@ -585,7 +613,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex w-full max-w-[596px] shrink-0 flex-row items-center justify-center gap-0 self-center lg:max-w-none lg:flex-1 lg:justify-end">
+            <div className="flex w-full max-w-[596px] shrink-0 flex-row items-start justify-center gap-0 self-center lg:max-w-none lg:flex-1 lg:justify-end">
               <div className="relative h-[min(544px,78vw)] w-[min(100%,280px)] shrink-0 sm:h-[480px] sm:w-[260px] md:h-[520px] md:w-[270px] lg:h-[544px] lg:w-[280px]">
                 <img
                   src={SECTION_TODO_DIA_IMG_TOP}
@@ -593,6 +621,7 @@ export default function App() {
                   width={560}
                   height={720}
                   className="absolute inset-x-0 top-0 h-[min(66%,360px)] w-full rounded-tl-[70px] object-cover object-center sm:h-[58%]"
+                  loading="lazy"
                   decoding="async"
                 />
                 <img
@@ -600,7 +629,8 @@ export default function App() {
                   alt="Casal no sofá a planear compras com cartão e portátil."
                   width={500}
                   height={310}
-                  className="absolute left-[15px] top-[71.5%] h-[28.5%] w-[250px] max-w-[calc(100%-30px)] object-cover object-center max-[380px]:left-2 max-[380px]:w-[min(250px,calc(100%-16px))]"
+                  className="absolute inset-x-0 top-[71.5%] h-[28.5%] w-full object-cover object-center"
+                  loading="lazy"
                   decoding="async"
                 />
               </div>
@@ -611,6 +641,7 @@ export default function App() {
                   width={632}
                   height={1088}
                   className="absolute left-[5px] right-[15px] top-0 h-[99%] rounded-tr-[70px] object-cover object-center"
+                  loading="lazy"
                   decoding="async"
                 />
               </div>
@@ -640,15 +671,19 @@ export default function App() {
 
             <div className="blupa-gradient-ring w-full rounded-[24px] p-[1.5px]">
               <div
-                key={featuredId}
-                className="benefits-feature-enter relative isolate min-h-[min(360px,72vw)] w-full overflow-hidden rounded-[22.5px] bg-[#1a141f] bg-cover bg-center sm:min-h-[420px] lg:h-[500px] lg:max-h-[500px]"
-                style={{
-                  backgroundImage: `url(${featured.image})`,
-                }}
+                className="relative isolate min-h-[min(360px,72vw)] w-full overflow-hidden rounded-[22.5px] bg-[#1a141f] sm:min-h-[420px] lg:h-[500px] lg:max-h-[500px]"
                 role="region"
                 aria-live="polite"
                 aria-label={featured.title}
               >
+                <img
+                  key={featuredId}
+                  src={featured.image}
+                  alt=""
+                  className="benefits-feature-bg-img absolute inset-0 h-full w-full object-cover object-center"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div
                   className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[62%] bg-gradient-to-t from-black/80 via-black/45 to-transparent"
                   aria-hidden
@@ -707,7 +742,7 @@ export default function App() {
             }}
             aria-hidden
           />
-          <div className="relative z-[1] flex min-h-[min(520px,88svh)] w-full flex-col justify-center lg:min-h-[852px]">
+          <div className="relative z-[1] flex min-h-[min(520px,88svh)] w-full flex-col justify-start lg:min-h-[852px]">
             <div
               className={`mx-auto flex w-full max-w-[1920px] flex-col items-start gap-[27px] px-[clamp(1.25rem,5vw,6.75rem)] pt-10 pb-14 sm:px-[clamp(1.5rem,5.5vw,6.75rem)] lg:pb-24 lg:pl-[108px] lg:pr-12 lg:pt-[7.25rem]`}
             >
@@ -754,6 +789,7 @@ export default function App() {
                     key={c.label}
                     label={c.label}
                     image={c.image}
+                    objectPosition={c.label === 'Automotivo' ? '25% center' : 'center'}
                   />
                 ))}
               </div>
@@ -785,6 +821,7 @@ export default function App() {
                   className="timeline-img-enter mx-auto block h-auto w-full max-w-full object-contain object-center"
                   width={684}
                   height={604}
+                  loading="lazy"
                   decoding="async"
                 />
               </div>
@@ -869,6 +906,7 @@ export default function App() {
                   className="block w-full max-w-full object-cover object-center lg:h-[852px] lg:w-[615px] lg:max-w-[615px]"
                   width={615}
                   height={852}
+                  loading="lazy"
                   decoding="async"
                 />
               </div>
@@ -880,12 +918,14 @@ export default function App() {
                   id="clientes-heading"
                   className="m-0 mb-4 max-w-[490px] font-sans text-[clamp(2rem,4vw,3.125rem)] font-semibold leading-[120%] text-[#04000B] lg:mb-[25px] lg:text-[50px]"
                 >
-                  Clientes do Grupo Paco
+                  Para quem é o Blupa
                 </h2>
 
                 <p className="m-0 mb-8 max-w-[502px] font-sans text-[clamp(1rem,1.8vw,1.125rem)] font-light leading-[132%] text-[#666666] lg:mb-10 lg:text-[18px]">
-                  Seu plano agora vai além. Além dos serviços que você já conhece,
-                  você passa a ter acesso a um clube completo de benefícios.
+                  Para todo mundo que ama economizar e aproveitar benefícios de
+                  verdade. Um clube completo, com vantagens pensadas pra facilitar
+                  sua rotina, reduzir gastos e trazer mais praticidade pro seu
+                  dia a dia.
                 </p>
 
                 {/* Contador */}
@@ -896,7 +936,7 @@ export default function App() {
                   >
                     +40mil
                   </span>
-                  <span className="max-w-[251px] font-sans text-[clamp(0.875rem,1.2vw,1rem)] font-bold leading-[170%] text-[#04000B] lg:text-[16px]">
+                  <span className="max-w-[251px] text-balance font-sans text-[clamp(0.875rem,1.2vw,1rem)] font-bold leading-[170%] text-[#04000B] lg:text-[16px]">
                     estabelecimentos em todo o Brasil
                   </span>
                 </div>
@@ -942,7 +982,7 @@ export default function App() {
         {/* ── Sétima seção: Faça parte do Blupa (formulário) ───────────────── */}
         <section
           id="contato"
-          className="relative w-full overflow-hidden bg-[#E9F1EE]"
+          className="relative w-full overflow-hidden bg-[#1D3B6E]"
           aria-labelledby="contato-heading"
         >
           {/* Imagem de fundo — lado direito (45% → 100%) */}
@@ -951,11 +991,10 @@ export default function App() {
             aria-hidden
           >
             <img
-              src={sétimaAsset(
-                'envio.jpg',
-              )}
+              src={encodeURI('/Midia Blupa/form.jpg')}
               alt=""
               className="block h-full w-full object-cover object-right"
+              loading="lazy"
               decoding="async"
             />
           </div>
@@ -965,71 +1004,152 @@ export default function App() {
             <div className="w-full max-w-[992px] bg-white px-6 py-10 sm:px-12 sm:py-12 lg:px-[100px] lg:py-[60px]">
 
               <form
-                className="flex w-full flex-col items-end gap-8"
+                className="flex w-full flex-col items-start gap-[48px]"
                 noValidate
               >
                 {/* Título */}
                 <h2
                   id="contato-heading"
-                  className="m-0 w-full font-sans text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold leading-[128%] text-[#04000B] lg:text-[44px]"
+                  className="m-0 w-full font-sans text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold leading-[128%] text-[#1A141F] lg:text-[44px]"
                 >
                   Desbloqueie os benefícios do Blupa
                 </h2>
 
-                {/* Toggle — É cliente Grupo Paco */}
-                <div className="flex w-full items-center gap-3">
-                  <span className="font-sans text-[16px] font-light leading-[148%] text-[#1A141F]">
-                    É cliente Grupo Paco
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={isClientePaco}
-                    onClick={() => setIsClientePaco((v) => !v)}
-                    className={`relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#08B0A0] ${isClientePaco ? 'bg-[#08B0A0]' : 'bg-[#D1D5DB]'}`}
-                  >
-                    {isClientePaco && (
-                      <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">
-                        Sim
-                      </span>
-                    )}
-                    <span
-                      className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isClientePaco ? 'left-[40px]' : 'left-[2px]'}`}
-                    />
-                  </button>
-                </div>
-
                 {/* Campos */}
-                <div className="flex w-full flex-col gap-[15px]">
+                <div className="flex w-full flex-col gap-4">
                   <input
                     type="text"
-                    placeholder="Nome Sobrenome"
-                    className="h-[51px] w-full rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                    placeholder="Nome completo"
+                    className="h-[51px] w-full rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
                   />
                   <div className="flex gap-4">
                     <input
-                      type="email"
-                      placeholder="seuemail@grupopaco.com.br"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                      type="text"
+                      placeholder="CPF"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
                     />
                     <input
                       type="tel"
-                      placeholder="Telefone"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[20px] text-[#04000B] placeholder-[#6C757D] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#08B0A0]/40"
+                      placeholder="Celular"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <input
+                      type="email"
+                      placeholder="E-mail"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Confirmar e-mail"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <input
+                      type="password"
+                      placeholder="Senha"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirmar senha"
+                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
                     />
                   </div>
                 </div>
 
-                {/* CTA — gradient ring + interior branco */}
-                <div className="drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-                  <button
-                    type="submit"
-                    className="blupa-gradient-ring cursor-pointer rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
-                  >
-                    <span className="block rounded-full bg-white px-6 py-[14px] font-sans text-[16px] font-bold leading-[148%] text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.04)]">
-                      Ativar
+                {/* Bloqueio de segurança */}
+                <div className="flex w-full flex-col gap-6">
+
+                  {/* Comunicações */}
+                  <div className="flex w-full flex-wrap items-center justify-between gap-4 border-y border-[#F3F7F9] py-4">
+                    <span className="font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">
+                      Deseja receber nossas comunicações?
                     </span>
-                  </button>
+                    <div className="flex items-center gap-4">
+                      {(
+                        [
+                          { label: 'E-mail', value: commEmail, set: setCommEmail },
+                          { label: 'SMS',    value: commSms,   set: setCommSms   },
+                          { label: 'WhatsApp', value: commWhatsapp, set: setCommWhatsapp },
+                        ] as const
+                      ).map(({ label, value, set }) => (
+                        <div key={label} className="flex items-center gap-2">
+                          <span className="font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">{label}</span>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={value}
+                            aria-label={`Receber comunicações por ${label}`}
+                            onClick={() => set((v) => !v)}
+                            className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E]"
+                            style={{ backgroundColor: value ? '#1D3B6E' : '#E5E0EB' }}
+                          >
+                            {value ? (
+                              <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">Sim</span>
+                            ) : (
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">Não</span>
+                            )}
+                            <span
+                              className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${value ? 'left-[40px]' : 'left-[2px]'}`}
+                            />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Termos */}
+                  <div className="flex w-full items-center justify-between gap-8">
+                    <span className="font-sans text-[16px] font-light leading-[148%] text-[#1A141F]">
+                      Li e concordo com os{' '}
+                      <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">Termos de uso</a>
+                      {' '}e{' '}
+                      <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">Política de Privacidade</a>
+                    </span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={termsAccepted}
+                      aria-label="Aceitar termos de uso e política de privacidade"
+                      onClick={() => setTermsAccepted((v) => !v)}
+                      className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E]"
+                      style={{ backgroundColor: termsAccepted ? '#1D3B6E' : '#E5E0EB' }}
+                    >
+                      {termsAccepted ? (
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">Sim</span>
+                      ) : (
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">Não</span>
+                      )}
+                      <span
+                        className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${termsAccepted ? 'left-[40px]' : 'left-[2px]'}`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="flex w-full justify-end drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+                    {termsAccepted ? (
+                      <button
+                        type="submit"
+                        className="blupa-gradient-ring cursor-pointer rounded-[24px] p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
+                      >
+                        <span className="block whitespace-nowrap rounded-[22.5px] bg-white px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-[#1A141F]">
+                          Avançar
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="cursor-not-allowed rounded-[24px] border-2 border-[#D2D7DB] bg-[#9D9D9C] px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-[#D2D7DB] whitespace-nowrap"
+                      >
+                        Avançar
+                      </button>
+                    )}
+                  </div>
                 </div>
               </form>
 
@@ -1044,6 +1164,7 @@ export default function App() {
               )}
               alt=""
               className="block h-full w-full object-cover object-top"
+              loading="lazy"
               decoding="async"
             />
           </div>
@@ -1073,7 +1194,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => scrollToSection('contato')}
-                  className="flex h-[52px] w-[267px] cursor-pointer items-center justify-center rounded-[24px] bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
+                  className="flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[24px] bg-[#1A141F] px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
                 >
                   Quero fazer parte do Blupa
                 </button>

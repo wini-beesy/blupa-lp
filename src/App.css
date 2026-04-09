@@ -80,19 +80,14 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes benefits-feature-enter {
-    from {
-      opacity: 0;
-      transform: scale(0.985) translateY(0.5rem);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
+  /* Crossfade suave da imagem de fundo ao trocar benefício */
+  @keyframes benefits-feature-bg-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
-  .benefits-feature-enter {
-    animation: benefits-feature-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  .benefits-feature-bg-img {
+    animation: benefits-feature-bg-fade 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   @keyframes benefits-card-enter {
@@ -113,7 +108,7 @@
   @keyframes benefits-feature-text {
     from {
       opacity: 0;
-      transform: translateY(0.4rem);
+      transform: translateY(0.35rem);
     }
     to {
       opacity: 1;
@@ -122,12 +117,12 @@
   }
 
   .benefits-feature-text {
-    animation: benefits-feature-text 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+    animation: benefits-feature-text 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .benefits-feature-enter,
+  .benefits-feature-bg-img,
   .benefits-feature-text,
   .benefits-card-enter {
     animation: none;
