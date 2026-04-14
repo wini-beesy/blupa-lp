@@ -115,17 +115,28 @@
 
 }
 
-/*
-  Opcional: ficheiros Axiforma em /public/fonts (woff2)
-  @font-face {
-    font-family: 'Axiforma';
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-    src: url('/fonts/Axiforma-Light.woff2') format('woff2');
-  }
-  … (Regular 400, Bold 700)
-*/
+/* Axiforma — coloque os .woff2 em `public/fonts/` (mesmos nomes; licença Blupa). */
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Axiforma-Light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Axiforma-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Axiforma-Bold.woff2') format('woff2');
+}
 
 @layer base {
   :root {
@@ -148,6 +159,47 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     scroll-padding-top: 1.5rem;
+    /* Firefox — sem gradiente no thumb; cor ícone da marca */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-blupa-corp-blue)
+      var(--color-blupa-neutral-spacer-light);
+  }
+
+  /* WebKit / Chromium / Safari — thumb com gradiente Blupa (mesma paleta do anel / hero) */
+  html::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: var(--color-blupa-neutral-spacer-light);
+    border-radius: 999px;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid var(--color-blupa-neutral-spacer-light);
+    background: linear-gradient(
+      180deg,
+      var(--color-blupa-corp-yellow) 0%,
+      var(--color-blupa-corp-coral) 14%,
+      var(--color-blupa-corp-pink) 28%,
+      var(--color-blupa-corp-purple) 42%,
+      var(--color-blupa-corp-dark-blue) 54%,
+      var(--color-blupa-corp-blue) 66%,
+      var(--color-blupa-corp-light-blue) 76%,
+      var(--color-blupa-corp-turquoise) 88%,
+      var(--color-blupa-corp-green) 100%
+    );
+    background-clip: padding-box;
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    filter: brightness(1.06) saturate(1.05);
+  }
+
+  html::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   body {
@@ -158,8 +210,8 @@
     line-height: var(--text-blupa-body-m--line-height);
     font-weight: var(--font-weight-blupa-light);
     color: var(--text);
-    /* Fundo alinhado à landing escura; evita faixa clara no scroll */
-    background: #120e16;
+    /* Fundo neutro claro (Blupa); blocos escuros trazem o próprio bg */
+    background: #f3f7f9;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -174,6 +226,14 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    font-family: var(--font-sans);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 
   h1,

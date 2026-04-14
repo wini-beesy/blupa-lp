@@ -1,5 +1,21 @@
-/* Landing: anel em gradiente (botões tipo “pill”) */
+/* Anel em gradiente só na borda (pseudo + mask). Sem gradiente por baixo do miolo — `blupa-glass-face` pode ser translúcido. */
 .blupa-gradient-ring {
+  --blupa-ring: 1.5px;
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+.blupa-gradient-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: calc(-1 * var(--blupa-ring));
+  box-sizing: border-box;
+  border-radius: inherit;
+  padding: var(--blupa-ring);
+  z-index: 0;
+  pointer-events: none;
   background: linear-gradient(
     135deg,
     #84d0f5 0%,
@@ -9,6 +25,36 @@
     #ea5045 75%,
     #ffcd00 100%
   );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.blupa-gradient-ring > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Grayscale/Glass (Figma button-primary): branco 10% + vidro quando há blur. */
+.blupa-glass-face {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@supports ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+  .blupa-glass-face {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Header gradient CTAs: sem vidro (blur/sombra interior) — especificidade acima de `.blupa-glass-face`. */
+.blupa-glass-face.blupa-glass-face--flat {
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* Taste-skill aligned: grain em camada fixa, só opacidade (GPU barato) */
@@ -80,16 +126,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Crossfade suave da imagem de fundo ao trocar benefício */
-  @keyframes benefits-feature-bg-fade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  .benefits-feature-bg-img {
-    animation: benefits-feature-bg-fade 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
   @keyframes benefits-card-enter {
     from {
       opacity: 0;
@@ -105,10 +141,11 @@
     animation: benefits-card-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
+  /* Texto: entrada suave só na primeira vez (sem key por slide — evita piscar a cada rotação). */
   @keyframes benefits-feature-text {
     from {
-      opacity: 0;
-      transform: translateY(0.35rem);
+      opacity: 0.88;
+      transform: translateY(0.2rem);
     }
     to {
       opacity: 1;
@@ -117,12 +154,11 @@
   }
 
   .benefits-feature-text {
-    animation: benefits-feature-text 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    animation: benefits-feature-text 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .benefits-feature-bg-img,
   .benefits-feature-text,
   .benefits-card-enter {
     animation: none;
@@ -255,23 +291,25 @@
   }
 }
 
-/* FAQ — painel do acordeão com transição suave (grid trick) */
+/* FAQ — painel do acordeão com transição suave (grid trick).
+   O miolo tem de estar num wrapper: filho direto do grid com min-height:auto
+   impede 0fr de colapsar a zero (sobra ~uma linha de texto). */
 .faq-panel {
   display: grid;
-  grid-template-rows: 0fr;
+  grid-template-rows: minmax(0, 0fr);
   opacity: 0;
   transition:
     grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.faq-panel > p {
+.faq-panel__inner {
   overflow: hidden;
   min-height: 0;
 }
 
 .faq-panel--open {
-  grid-template-rows: 1fr;
+  grid-template-rows: minmax(0, 1fr);
   opacity: 1;
   transition:
     grid-template-rows 0.42s cubic-bezier(0.16, 1, 0.3, 1),

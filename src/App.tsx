@@ -1,34 +1,35 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ButtonHTMLAttributes, ImgHTMLAttributes, ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import { prefetchLandingMediaUrls } from './prefetchLandingMedia'
 
 const LOGO_SRC = '/Midia Blupa/logo.svg'
 
 const HERO_SLIDES = [
-  'Property 1=Home - cinema.png',
-  'Property 1=Home - automovel.png',
-  'Property 1=Home - marketplace.png',
-  'Property 1=Home - lazer.png',
-  'Property 1=Home - pet.png',
-  'Property 1=Home - mercado.png',
+  'Property 1=Home - cinema.avif',
+  'Property 1=Home - automovel.avif',
+  'Property 1=Home - marketplace.avif',
+  'Property 1=Home - lazer.avif',
+  'Property 1=Home - pet.avif',
+  'Property 1=Home - mercado.avif',
 ].map((f) => encodeURI(`/Midia Blupa/video/${f}`))
 
 const sectionAsset = (file: string) =>
   encodeURI(`/Midia Blupa/Primeira seção/${file}`)
 
-const SECTION_TODO_DIA_IMG_TOP = sectionAsset('envato-labs-image-edit (1).png')
+const SECTION_TODO_DIA_IMG_TOP = sectionAsset('envato-labs-image-edit (1).avif')
 const SECTION_TODO_DIA_IMG_COUPLE = sectionAsset(
-  'chinese-couple-using-laptop-and-credit-card-2026-03-24-14-13-49-utc.jpg',
+  'chinese-couple-using-laptop-and-credit-card-2026-03-24-14-13-49-utc.avif',
 )
 const SECTION_TODO_DIA_IMG_KEYS = sectionAsset(
-  'young-woman-in-white-official-clothes-stands-in-fr-2026-01-08-23-29-06-utc 2.png',
+  'young-woman-in-white-official-clothes-stands-in-fr-2026-01-08-23-29-06-utc 2.avif',
 )
 
 const section2Asset = (file: string) =>
   encodeURI(`/Midia Blupa/Segunda seção/${file}`)
 
 const SECTION_BRANDS_BANNER = encodeURI(
-  '/Midia Blupa/Terceira seção- banner/E108FGI5 1.png',
+  '/Midia Blupa/Terceira seção- banner/E108FGI5 1.avif',
 )
 
 const quartaAsset = (file: string) =>
@@ -66,21 +67,21 @@ const TIMELINE_STEPS = [
     title: '1. Cadastre',
     description:
       'Faça sua inscrição em poucos minutos. É simples, rápido e digital.',
-    image: quintaAsset('Group 1.png'),
+    image: quintaAsset('Group 1.avif'),
     accent: '#FFCD00',
   },
   {
     title: '2. Explore os benefícios',
     description:
       'Acesse o clube e conheça todas as vantagens exclusivas disponíveis em um só lugar.',
-    image: quintaAsset('Group 2.png'),
+    image: quintaAsset('Group 2.avif'),
     accent: '#8C4091',
   },
   {
     title: '3. Use no seu tempo',
     description:
       'Aproveite descontos e vantagens quando fizer sentido para você, no seu ritmo e sem pressa.',
-    image: quintaAsset('Group 3.png'),
+    image: quintaAsset('Group 3.avif'),
     accent: '#EA5045',
   },
 ] as const
@@ -89,59 +90,59 @@ const PARTNER_CATEGORIES: readonly { label: string; image: string }[] = [
   {
     label: 'Automotivo',
     image: quartaAsset(
-      'hand-holding-car-keys-selective-focus-woman-buyi-2026-03-19-07-09-09-utc.jpg',
+      'hand-holding-car-keys-selective-focus-woman-buyi-2026-03-19-07-09-09-utc.avif',
     ),
   },
   {
     label: 'Beleza e Moda',
     image: quartaAsset(
-      'flat-lay-with-woman-fashion-accessories-in-yellow-2026-03-23-23-04-18-utc.jpg',
+      'flat-lay-with-woman-fashion-accessories-in-yellow-2026-03-23-23-04-18-utc.avif',
     ),
   },
   {
     label: 'Casa e Decor',
     image: quartaAsset(
-      'a-fragment-of-a-home-interior-a-light-chair-a-pict-2026-03-17-20-10-25-utc.jpg',
+      'a-fragment-of-a-home-interior-a-light-chair-a-pict-2026-03-17-20-10-25-utc.avif',
     ),
   },
   {
     label: 'Educação',
     image: quartaAsset(
-      'graduation-girl-holding-her-diploma-with-pride-2026-01-09-14-53-49-utc.jpg',
+      'graduation-girl-holding-her-diploma-with-pride-2026-01-09-14-53-49-utc.avif',
     ),
   },
   {
     label: 'Entretenimento',
     image: quartaAsset(
-      'stylish-man-in-black-jacket-piggybacking-happy-gir-2026-01-09-12-37-46-utc.jpg',
+      'stylish-man-in-black-jacket-piggybacking-happy-gir-2026-01-09-12-37-46-utc.avif',
     ),
   },
   {
     label: 'Farmácia e Saúde',
     image: quartaAsset(
-      'female-doctors-perform-disease-tests-and-provide-m-2026-03-16-06-05-07-utc.jpg',
+      'female-doctors-perform-disease-tests-and-provide-m-2026-03-16-06-05-07-utc.avif',
     ),
   },
   {
     label: 'Gastronomia',
     image: quartaAsset(
-      'bowl-with-chicken-pieces-rice-tomatoes-peppers-2026-03-25-09-50-04-utc.JPG',
+      'bowl-with-chicken-pieces-rice-tomatoes-peppers-2026-03-25-09-50-04-utc.avif',
     ),
   },
   {
     label: 'Lazer e Viagem',
-    image: quartaAsset('airplane-wing-in-the-sky-2026-03-17-08-12-22-utc.jpg'),
+    image: quartaAsset('airplane-wing-in-the-sky-2026-03-17-08-12-22-utc.avif'),
   },
   {
     label: 'Petshop',
     image: quartaAsset(
-      'cute-jack-russell-dog-sitting-in-shower-ready-for-2026-01-05-23-29-11-utc.jpg',
+      'cute-jack-russell-dog-sitting-in-shower-ready-for-2026-01-05-23-29-11-utc.avif',
     ),
   },
   {
     label: 'Serviços',
     image: quartaAsset(
-      'woman-relaxing-from-a-spa-treatment-2026-03-18-09-56-49-utc.jpg',
+      'woman-relaxing-from-a-spa-treatment-2026-03-18-09-56-49-utc.avif',
     ),
   },
 ]
@@ -166,7 +167,7 @@ const BENEFIT_BY_ID: Record<
     description:
       'Ao entrar no Blupa, você passa a ter acesso a descontos e condições especiais com nossas marcas parceiras.',
     image: section2Asset(
-      'business-woman-laptop-and-celebration-with-excite-2026-01-09-10-42-05-utc.jpg',
+      'business-woman-laptop-and-celebration-with-excite-2026-01-09-10-42-05-utc.avif',
     ),
   },
   organizado: {
@@ -175,7 +176,7 @@ const BENEFIT_BY_ID: Record<
     description:
       'Nada de procurar cupom, lembrar campanha ou esperar promoção. No Blupa, as vantagens ficam centralizadas, organizadas e fáceis de consultar sempre que você precisar.',
     image: section2Asset(
-      'group-of-young-people-using-laptop-and-credit-card-2026-01-07-05-52-01-utc.jpg',
+      'group-of-young-people-using-laptop-and-credit-card-2026-01-07-05-52-01-utc.avif',
     ),
   },
   condicoes: {
@@ -184,7 +185,7 @@ const BENEFIT_BY_ID: Record<
     description:
       'As ofertas do Blupa não são abertas ao público geral. São vantagens exclusivas para quem faz parte do clube, criadas a partir de parcerias estratégicas.',
     image: section2Asset(
-      'multi-cultural-group-of-friends-with-laptop-and-cr-2026-01-05-23-00-01-utc.jpg',
+      'multi-cultural-group-of-friends-with-laptop-and-cr-2026-01-05-23-00-01-utc.avif',
     ),
   },
   uso: {
@@ -193,7 +194,7 @@ const BENEFIT_BY_ID: Record<
     description:
       'Você pode acessar e aproveitar os benefícios sempre que quiser, de forma prática, respeitando as regras e condições específicas de cada parceiro.',
     image: section2Asset(
-      'smiling-man-working-late-at-night-in-the-office-2026-03-26-10-23-12-utc.jpg',
+      'smiling-man-working-late-at-night-in-the-office-2026-03-26-10-23-12-utc.avif',
     ),
   },
   clube: {
@@ -202,10 +203,36 @@ const BENEFIT_BY_ID: Record<
     description:
       'Novas marcas, novas ofertas e novas vantagens entram constantemente. O Blupa evolui junto com a rotina e com as necessidades dos membros.',
     image: section2Asset(
-      'smiling-student-videocalling-computer-at-evening-w-2026-03-11-01-01-15-utc.jpg',
+      'smiling-student-videocalling-computer-at-evening-w-2026-03-11-01-01-15-utc.avif',
     ),
   },
 }
+
+const LANDING_MEDIA_URLS: string[] = (() => {
+  const set = new Set<string>()
+  const add = (u: string) => {
+    if (u) set.add(u)
+  }
+  add(LOGO_SRC)
+  HERO_SLIDES.forEach(add)
+  add(SECTION_TODO_DIA_IMG_TOP)
+  add(SECTION_TODO_DIA_IMG_COUPLE)
+  add(SECTION_TODO_DIA_IMG_KEYS)
+  add(SECTION_BRANDS_BANNER)
+  PARTNER_CATEGORIES.forEach((c) => add(c.image))
+  TIMELINE_STEPS.forEach((t) => add(t.image))
+  ;(Object.values(BENEFIT_BY_ID) as { image: string }[]).forEach((b) =>
+    add(b.image),
+  )
+  add(sextaAsset('envato-labs-image-edit (2) 1.avif'))
+  add(encodeURI('/Midia Blupa/form.avif'))
+  add(
+    sétimaAsset(
+      'website-header-of-cheerful-young-woman-in-sportswe-2026-01-09-01-22-27-utc 1.avif',
+    ),
+  )
+  return [...set]
+})()
 
 /** Frame Figma do hero (Ativo 4) — proporção e hint de dimensão intrínseca */
 const HERO_INTRINSIC_W = 1041
@@ -223,6 +250,150 @@ function scrollToSection(id: string) {
   const el = document.getElementById(id)
   if (!el) return
   el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+/** Troca de fundo sem “flash”: mantém a imagem anterior visível até a nova carregar e faz crossfade. */
+function BenefitsFeaturedCrossfadeBg({ imageSrc }: { imageSrc: string }) {
+  const [reduceMotion, setReduceMotion] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduceMotion(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  const [top, setTop] = useState<0 | 1>(0)
+  const [urls, setUrls] = useState<[string, string]>(() => [imageSrc, imageSrc])
+  const topRef = useRef(top)
+  const urlsRef = useRef(urls)
+  const pendingBack = useRef<number | null>(null)
+
+  useLayoutEffect(() => {
+    topRef.current = top
+    urlsRef.current = urls
+  }, [top, urls])
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      if (reduceMotion) {
+        setUrls([imageSrc, imageSrc])
+        setTop(0)
+        pendingBack.current = null
+        return
+      }
+
+      const t = topRef.current
+      const u = urlsRef.current
+      const shown = u[t]
+      if (imageSrc === shown) return
+
+      const back = (1 - t) as 0 | 1
+      if (u[back] === imageSrc) {
+        pendingBack.current = null
+        setTop(back)
+        return
+      }
+
+      pendingBack.current = back
+      setUrls((prev) => {
+        const next: [string, string] = [...prev]
+        next[back] = imageSrc
+        return next
+      })
+    })
+  }, [imageSrc, reduceMotion])
+
+  const onLayerLoad = (slot: 0 | 1) => {
+    if (reduceMotion) return
+    if (pendingBack.current !== slot) return
+    pendingBack.current = null
+    setTop(slot)
+  }
+
+  const layerClass =
+    'absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none'
+
+  return (
+    <>
+      <img
+        src={urls[0]}
+        alt=""
+        className={`${layerClass} ${top === 0 ? 'z-[1] opacity-100' : 'z-0 opacity-0'}`}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => onLayerLoad(0)}
+      />
+      <img
+        src={urls[1]}
+        alt=""
+        className={`${layerClass} ${top === 1 ? 'z-[1] opacity-100' : 'z-0 opacity-0'}`}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => onLayerLoad(1)}
+      />
+    </>
+  )
+}
+
+/** Acumula índices já liberados para download: ativo + vizinhos no anel. */
+function useAccumulatedRingIndices(active: number, length: number) {
+  const [loaded, setLoaded] = useState(() => new Set<number>(length > 0 ? [0] : []))
+  useEffect(() => {
+    if (length <= 0) return
+    queueMicrotask(() => {
+      setLoaded((prev) => {
+        const next = new Set(prev)
+        next.add(active)
+        next.add((active + 1) % length)
+        next.add((active - 1 + length) % length)
+        return next
+      })
+    })
+  }, [active, length])
+  return loaded
+}
+
+function LazyInViewImg({
+  rootMargin = '100px',
+  wrapperClassName = '',
+  className = '',
+  placeholderClassName = 'block min-h-[1px] w-full bg-neutral-200/10',
+  ...imgProps
+}: ImgHTMLAttributes<HTMLImageElement> & {
+  rootMargin?: string
+  wrapperClassName?: string
+  placeholderClassName?: string
+}) {
+  const wrapRef = useRef<HTMLSpanElement>(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true)
+          obs.disconnect()
+        }
+      },
+      { rootMargin },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [rootMargin])
+  return (
+    <span ref={wrapRef} className={wrapperClassName}>
+      {visible ? (
+        <img {...imgProps} className={className} alt={imgProps.alt ?? ''} />
+      ) : (
+        <span className={placeholderClassName} aria-hidden />
+      )}
+    </span>
+  )
 }
 
 function ChevronDown({ className }: { className?: string }) {
@@ -258,11 +429,11 @@ function GradientBorderButton({
   return (
     <button
       type="button"
-      className={`blupa-gradient-ring rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
+      className={`blupa-gradient-ring inline-flex h-[42px] items-stretch rounded-[24px] p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
       {...props}
     >
       <span
-        className={`block rounded-full bg-[#1A141F] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ${innerClassName}`}
+        className={`blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-[148%] text-white ${innerClassName}`}
       >
         {children}
       </span>
@@ -270,28 +441,35 @@ function GradientBorderButton({
   )
 }
 
-/** Hero CTA — anel `blupa-gradient-ring` + interior escuro (hero) ou claro (secção branca); raio 24px (Figma). */
+/** Hero CTA — anel colorido `blupa-gradient-ring` + interior `blupa-glass-face` (Figma Grayscale/Glass no escuro). */
 function HeroGlassButton({
   children,
   className = '',
+  innerClassName = '',
   variant = 'dark',
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
   variant?: 'dark' | 'light'
+  innerClassName?: string
 }) {
   const innerSkin =
     variant === 'light'
-      ? 'bg-white text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.06)]'
-      : 'bg-[#1A141F] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
+      ? `font-bold text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.06)] ${innerClassName || 'bg-transparent'}`
+      : `blupa-glass-face font-light text-white${innerClassName ? ` ${innerClassName}` : ''}`
+  const lightLayout =
+    variant === 'light'
+      ? 'h-[56px] w-[271px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]'
+      : 'w-full max-w-[16.9375rem] shrink-0'
+  const innerY = variant === 'light' ? 'py-0' : 'py-4'
   return (
     <button
       type="button"
-      className={`blupa-gradient-ring box-border flex w-full max-w-[16.9375rem] shrink-0 cursor-pointer rounded-[24px] border-none p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${className}`}
+      className={`blupa-gradient-ring box-border flex cursor-pointer items-stretch rounded-[24px] border-none p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${lightLayout} ${className}`}
       {...props}
     >
       <span
-        className={`flex w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-4 font-sans text-base font-bold leading-[148%] ${innerSkin}`}
+        className={`box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 font-sans text-base leading-[148%] ${innerY} ${innerSkin}`}
       >
         {children}
       </span>
@@ -339,11 +517,13 @@ function PartnerFlipCard({ label, image, objectPosition = 'center' }: { label: s
           </div>
         </div>
         <div className="partner-flip-face partner-flip-face--back overflow-hidden">
-          <img
+          <LazyInViewImg
+            wrapperClassName="absolute inset-0 block"
+            className="absolute inset-0 h-full w-full object-cover"
+            placeholderClassName="absolute inset-0 bg-[#1A141F]/35"
+            style={{ objectPosition }}
             src={image}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition }}
             loading="lazy"
             decoding="async"
           />
@@ -379,6 +559,16 @@ export default function App() {
     useState<BenefitId[]>(BENEFIT_QUEUE_INITIAL)
   const [timelineStep, setTimelineStep] = useState(0)
   const [faqOpen, setFaqOpen] = useState<number | null>(null)
+  const comoFuncionaRef = useRef<HTMLDivElement>(null)
+  const timelineRotateRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const marcasBannerRef = useRef<HTMLElement>(null)
+  const [marcasBannerBgOn, setMarcasBannerBgOn] = useState(false)
+
+  const heroSlidesLoaded = useAccumulatedRingIndices(heroSlide, HERO_SLIDES.length)
+  const timelineSlidesLoaded = useAccumulatedRingIndices(
+    timelineStep,
+    TIMELINE_STEPS.length,
+  )
 
   const featuredId = benefitQueue[0]
   const cardIds = benefitQueue.slice(1)
@@ -386,12 +576,24 @@ export default function App() {
 
   const autoRotateRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  useEffect(() => {
+    prefetchLandingMediaUrls(LANDING_MEDIA_URLS)
+  }, [])
+
   const startAutoRotate = useCallback(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     if (autoRotateRef.current) clearInterval(autoRotateRef.current)
     autoRotateRef.current = setInterval(() => {
       setBenefitQueue((q) => rotateBenefitQueue(q, 0))
     }, 4000)
+  }, [])
+
+  const startTimelineAutoRotate = useCallback(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (timelineRotateRef.current) clearInterval(timelineRotateRef.current)
+    timelineRotateRef.current = setInterval(() => {
+      setTimelineStep((s) => (s + 1) % TIMELINE_STEPS.length)
+    }, 4500)
   }, [])
 
   const onBenefitCardClick = (slotIndex: number) => {
@@ -420,6 +622,30 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    const el = comoFuncionaRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startTimelineAutoRotate()
+        } else if (timelineRotateRef.current) {
+          clearInterval(timelineRotateRef.current)
+          timelineRotateRef.current = null
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+    )
+    obs.observe(el)
+    return () => {
+      obs.disconnect()
+      if (timelineRotateRef.current) {
+        clearInterval(timelineRotateRef.current)
+        timelineRotateRef.current = null
+      }
+    }
+  }, [startTimelineAutoRotate])
+
+  useEffect(() => {
     if (!benefitsInView) return
     startAutoRotate()
     return () => {
@@ -429,6 +655,22 @@ export default function App() {
       }
     }
   }, [benefitsInView, startAutoRotate])
+
+  useEffect(() => {
+    const el = marcasBannerRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMarcasBannerBgOn(true)
+          obs.disconnect()
+        }
+      },
+      { rootMargin: '160px 0px', threshold: 0.01 },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -497,19 +739,19 @@ export default function App() {
             </button>
           </nav>
 
-          <div className="relative z-10 flex w-full items-center justify-end gap-3 sm:w-auto sm:shrink-0">
+          <div className="relative z-10 flex w-full items-center justify-end gap-6 sm:w-auto sm:shrink-0">
             <a
               href="https://clube.blupa.com.br/member/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="blupa-gradient-ring shrink-0 rounded-full p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
+              className="blupa-gradient-ring box-border inline-flex h-[42px] shrink-0 items-stretch rounded-[24px] p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
             >
-              <span className="block whitespace-nowrap rounded-full bg-[#1A141F] px-6 py-4 font-sans text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:text-base">
+              <span className="blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-[148%] text-white">
                 Entrar
               </span>
             </a>
             <GradientBorderButton
-              innerClassName="px-6 py-4 text-sm whitespace-nowrap md:text-base"
+              innerClassName="whitespace-nowrap"
               className="shrink-0"
               onClick={() => scrollToSection('contato')}
             >
@@ -558,21 +800,31 @@ export default function App() {
               className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:ml-auto lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-none lg:translate-x-[min(12vw,7.5rem)]"
               style={{ aspectRatio: `${HERO_INTRINSIC_W}/${HERO_INTRINSIC_H}` }}
             >
-              {HERO_SLIDES.map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt=""
-                  width={HERO_INTRINSIC_W}
-                  height={HERO_INTRINSIC_H}
-                  className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
-                    i === heroSlide ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  fetchPriority={i === 0 ? 'high' : 'low'}
-                  decoding={i === 0 ? 'sync' : 'async'}
-                />
-              ))}
+              {HERO_SLIDES.map((src, i) =>
+                heroSlidesLoaded.has(i) ? (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    width={HERO_INTRINSIC_W}
+                    height={HERO_INTRINSIC_H}
+                    className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
+                      i === heroSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    loading={i === heroSlide ? 'eager' : 'lazy'}
+                    fetchPriority={i === heroSlide ? 'high' : 'low'}
+                    decoding={i === heroSlide ? 'sync' : 'async'}
+                  />
+                ) : (
+                  <div
+                    key={src}
+                    className={`absolute inset-0 bg-[#1A141F] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                      i === heroSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    aria-hidden
+                  />
+                ),
+              )}
             </div>
           </div>
         </main>
@@ -606,8 +858,13 @@ export default function App() {
                   já conhece.
                 </p>
               </div>
-              <div className="flex flex-row flex-wrap items-center gap-5">
-                <HeroGlassButton type="button" variant="light" onClick={() => scrollToSection('contato')}>
+              <div className="flex flex-row flex-wrap items-center gap-6">
+                <HeroGlassButton
+                  type="button"
+                  variant="light"
+                  innerClassName="bg-[#F3F7F9]"
+                  onClick={() => scrollToSection('contato')}
+                >
                   Quero fazer parte do Blupa
                 </HeroGlassButton>
               </div>
@@ -669,21 +926,14 @@ export default function App() {
               Benefícios do Blupa
             </h2>
 
-            <div className="blupa-gradient-ring w-full rounded-[24px] p-[1.5px]">
+            <div className="blupa-gradient-ring w-full rounded-[24px] p-0">
               <div
                 className="relative isolate min-h-[min(360px,72vw)] w-full overflow-hidden rounded-[22.5px] bg-[#1a141f] sm:min-h-[420px] lg:h-[500px] lg:max-h-[500px]"
                 role="region"
                 aria-live="polite"
                 aria-label={featured.title}
               >
-                <img
-                  key={featuredId}
-                  src={featured.image}
-                  alt=""
-                  className="benefits-feature-bg-img absolute inset-0 h-full w-full object-cover object-center"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <BenefitsFeaturedCrossfadeBg imageSrc={featured.image} />
                 <div
                   className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[62%] bg-gradient-to-t from-black/80 via-black/45 to-transparent"
                   aria-hidden
@@ -694,7 +944,7 @@ export default function App() {
                 />
 
                 <div className="relative z-[2] flex min-h-[min(360px,72vw)] flex-col justify-end sm:min-h-[420px] lg:min-h-0 lg:h-full lg:justify-end">
-                  <div key={featuredId} className="benefits-feature-text flex flex-col gap-3 px-6 pb-10 pt-16 sm:gap-4 sm:px-10 sm:pb-10 lg:pb-12">
+                  <div className="benefits-feature-text flex flex-col gap-3 px-6 pb-10 pt-16 sm:gap-4 sm:px-10 sm:pb-10 lg:pb-12">
                     <h3 className="m-0 max-w-[28rem] font-sans text-[clamp(1.25rem,2.5vw,1.875rem)] font-bold leading-[120%] text-white lg:text-[30px] lg:leading-[120%]">
                       {featured.title}
                     </h3>
@@ -730,16 +980,21 @@ export default function App() {
         </section>
 
         <section
+          ref={marcasBannerRef}
           className="relative isolate w-full overflow-hidden lg:min-h-[852px]"
           aria-labelledby="marcas-beneficios-heading"
         >
           <div
             className="pointer-events-none absolute inset-0 bg-[#ebeae8] bg-center bg-no-repeat [transform:scaleX(-1)]"
-            style={{
-              backgroundImage: `url(${SECTION_BRANDS_BANNER})`,
-              /* Menor que cover = mais campo visível (menos zoom). Ajuste o % se precisares. */
-              backgroundSize: '100%',
-            }}
+            style={
+              marcasBannerBgOn
+                ? {
+                    backgroundImage: `url(${SECTION_BRANDS_BANNER})`,
+                    /* Menor que cover = mais campo visível (menos zoom). Ajuste o % se precisares. */
+                    backgroundSize: '100%',
+                  }
+                : undefined
+            }
             aria-hidden
           />
           <div className="relative z-[1] flex min-h-[min(520px,88svh)] w-full flex-col justify-start lg:min-h-[852px]">
@@ -756,11 +1011,9 @@ export default function App() {
                 No Blupa, essas marcas se transformam em benefícios prontos para
                 usar quando fizer sentido para você.
               </p>
-              <div className="drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-                <HeroGlassButton type="button" variant="light" onClick={() => scrollToSection('contato')}>
-                  Quero fazer parte do Blupa
-                </HeroGlassButton>
-              </div>
+              <HeroGlassButton type="button" variant="light" onClick={() => scrollToSection('contato')}>
+                Quero fazer parte do Blupa
+              </HeroGlassButton>
             </div>
           </div>
         </section>
@@ -811,19 +1064,29 @@ export default function App() {
             aria-hidden
           />
 
-          <div className="relative z-[1] mx-auto flex w-full max-w-[1920px] flex-col lg:flex-row lg:items-center">
+          <div
+            ref={comoFuncionaRef}
+            className="relative z-[1] mx-auto flex w-full max-w-[1920px] flex-col lg:flex-row lg:items-center"
+          >
             <div className="relative z-[1] flex w-full items-center justify-center bg-[#1A141F] px-6 py-16 sm:py-20 lg:w-[46%] lg:justify-end lg:bg-transparent lg:px-0 lg:py-[clamp(5rem,10vw,8.5rem)]">
               <div className="timeline-image-glow relative w-full max-w-[min(683.71px,90vw)] shrink-0">
-                <img
-                  key={TIMELINE_STEPS[timelineStep].image}
-                  src={TIMELINE_STEPS[timelineStep].image}
-                  alt=""
-                  className="timeline-img-enter mx-auto block h-auto w-full max-w-full object-contain object-center"
-                  width={684}
-                  height={604}
-                  loading="lazy"
-                  decoding="async"
-                />
+                {timelineSlidesLoaded.has(timelineStep) ? (
+                  <img
+                    key={TIMELINE_STEPS[timelineStep].image}
+                    src={TIMELINE_STEPS[timelineStep].image}
+                    alt=""
+                    className="timeline-img-enter mx-auto block h-auto w-full max-w-full object-contain object-center"
+                    width={684}
+                    height={604}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div
+                    className="mx-auto aspect-[684/604] w-full max-w-full bg-[#1A141F]"
+                    aria-hidden
+                  />
+                )}
               </div>
             </div>
 
@@ -853,8 +1116,11 @@ export default function App() {
                             id={headingId}
                             aria-expanded={isOpen}
                             aria-controls={panelId}
-                            onClick={() => setTimelineStep(index)}
-                            className="relative flex h-20 w-full min-h-[80px] cursor-pointer items-center rounded-[10px] bg-[#F8F7F0] py-0 pl-[38px] pr-[10px] text-left transition-[background-color] duration-200 hover:bg-[#f0efe6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4] motion-reduce:transition-none"
+                            onClick={() => {
+                              setTimelineStep(index)
+                              startTimelineAutoRotate()
+                            }}
+                            className="relative flex h-20 w-full min-h-[80px] cursor-pointer items-center rounded-[10px] bg-[#F8F7F0] py-0 pl-[38px] pr-[10px] text-left shadow-[0px_15px_30px_rgb(19_40_77/0.1)] transition-[background-color] duration-200 hover:bg-[#f0efe6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4] motion-reduce:transition-none"
                           >
                             <span className="min-w-0 flex-1 pr-[76px] font-sans text-[clamp(1rem,2.5vw,1.375rem)] font-bold leading-[124%] text-[#1F1E17] lg:text-[22px] lg:leading-[27px]">
                               {step.title}
@@ -901,7 +1167,7 @@ export default function App() {
               {/* Imagem — centrada verticalmente no desktop (top 120px = 11% de 1092px) */}
               <div className="flex w-full shrink-0 items-center justify-end lg:w-[48.3%] lg:pt-[120px]">
                 <img
-                  src={sextaAsset('envato-labs-image-edit (2) 1.png')}
+                  src={sextaAsset('envato-labs-image-edit (2) 1.avif')}
                   alt=""
                   className="block w-full max-w-full object-cover object-center lg:h-[852px] lg:w-[615px] lg:max-w-[615px]"
                   width={615}
@@ -991,7 +1257,7 @@ export default function App() {
             aria-hidden
           >
             <img
-              src={encodeURI('/Midia Blupa/form.jpg')}
+              src={encodeURI('/Midia Blupa/form.avif')}
               alt=""
               className="block h-full w-full object-cover object-right"
               loading="lazy"
@@ -1160,7 +1426,7 @@ export default function App() {
           <div className="mt-0 h-64 w-full lg:hidden">
             <img
               src={sétimaAsset(
-                'website-header-of-cheerful-young-woman-in-sportswe-2026-01-09-01-22-27-utc 1.png',
+                'website-header-of-cheerful-young-woman-in-sportswe-2026-01-09-01-22-27-utc 1.avif',
               )}
               alt=""
               className="block h-full w-full object-cover object-top"
@@ -1186,15 +1452,14 @@ export default function App() {
                 Perguntas frequentes sobre o Blupa
               </h2>
 
-              {/* Borda em gradiente: wrapper com blupa-gradient-ring + padding 2px */}
+              {/* Borda em gradiente + miolo sólido (sem glass); p-0 = colado ao anel */}
               <div
-                className="blupa-gradient-ring rounded-[26px] p-[2px]"
-                style={{ filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.25))' }}
+                className="blupa-gradient-ring inline-flex max-w-full rounded-[26px] p-0 [--blupa-ring:2px] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
               >
                 <button
                   type="button"
                   onClick={() => scrollToSection('contato')}
-                  className="flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[24px] bg-[#1A141F] px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
+                  className="box-border inline-flex h-[56px] shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[24px] bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
                 >
                   Quero fazer parte do Blupa
                 </button>
@@ -1243,9 +1508,11 @@ export default function App() {
                       aria-hidden={!isOpen}
                       className={`faq-panel ${isOpen ? 'faq-panel--open' : ''}`}
                     >
-                      <p className="m-0 px-6 pb-6 font-sans text-[clamp(0.875rem,1.6vw,1rem)] font-light leading-[160%] text-[#1A141F] opacity-75 lg:text-[16px]">
-                        {item.answer}
-                      </p>
+                      <div className="faq-panel__inner">
+                        <p className="m-0 px-6 pb-6 font-sans text-[clamp(0.875rem,1.6vw,1rem)] font-light leading-[160%] text-[#1A141F] opacity-75 lg:text-[16px]">
+                          {item.answer}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )
@@ -1259,11 +1526,11 @@ export default function App() {
         <footer className="w-full bg-[#1A141F] px-6 py-16 sm:px-10 lg:px-6 lg:py-[64px]">
       <div className="mx-auto flex w-full max-w-[1096px] flex-col gap-[42px]">
 
-        {/* Linha principal: logo+tagline | links */}
-        <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between lg:gap-[150px]">
+        {/* Linha principal: logo+tagline + links rápidos à esquerda, com gap */}
+        <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:gap-10 lg:gap-16">
 
-          {/* Coluna esquerda: logo + tagline */}
-          <div className="flex flex-col gap-16 lg:w-[408px]">
+          {/* Coluna: logo + tagline */}
+          <div className="flex shrink-0 flex-col gap-16 lg:w-[408px]">
             <img
               src={LOGO_SRC}
               alt="Blupa"
@@ -1282,9 +1549,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Coluna direita: links rápidos */}
-          <nav aria-label="Links rápidos">
-            <div className="flex flex-col gap-6 lg:w-[158px]">
+          <nav aria-label="Links rápidos" className="shrink-0">
+            <div className="flex flex-col gap-6 sm:min-w-[158px] lg:w-[158px]">
               <p className="m-0 font-sans text-[18px] font-bold leading-[132%] text-white">
                 Links rápidos
               </p>
@@ -1322,7 +1588,7 @@ export default function App() {
 
         {/* Copyright */}
         <div className="flex w-full items-center justify-center border-t border-white/10 pt-8">
-          <p className="m-0 text-center font-[Montserrat,sans-serif] text-[12px] font-normal leading-[140%] text-white">
+          <p className="m-0 text-center font-sans text-[12px] font-normal leading-[140%] text-white">
             © 2026 Blupa. Todos os direitos reservados.
           </p>
         </div>
