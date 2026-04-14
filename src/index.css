@@ -3,7 +3,7 @@
 /* Blupa design system — cores, sombras, raios, tipografia (Figma).
    `static` mantém todas as variáveis no CSS mesmo sem classes que as usem. */
 @theme static {
-  /* Tipografia: `font-sans` = Axiforma; carregar ficheiros em /public/fonts + @font-face abaixo */
+  /* Tipografia: `font-sans` = Axiforma; ficheiros em `src/assets/Axiforma-Font/WOFF2/` + @font-face abaixo */
   --font-sans: 'Axiforma', ui-sans-serif, system-ui, sans-serif;
 
   --font-weight-blupa-light: 300;
@@ -115,27 +115,62 @@
 
 }
 
-/* Axiforma — coloque os .woff2 em `public/fonts/` (mesmos nomes; licença Blupa). */
+/* Axiforma — WOFF2 em `src/assets/Axiforma-Font/WOFF2/` (Vite resolve os URLs no build). */
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Thin.woff2') format('woff2');
+}
 @font-face {
   font-family: 'Axiforma';
   font-weight: 300;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/Axiforma-Light.woff2') format('woff2');
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Light.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Axiforma';
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/Axiforma-Regular.woff2') format('woff2');
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Semi Bold.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Axiforma';
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/Axiforma-Bold.woff2') format('woff2');
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Heavy.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Axiforma';
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/Axiforma-Font/WOFF2/Axiforma Black.woff2') format('woff2');
 }
 
 @layer base {

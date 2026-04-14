@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ImgHTMLAttributes, ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import { BlupaSignupFormCard } from './components/BlupaSignupFormCard'
 import { prefetchLandingMediaUrls } from './prefetchLandingMedia'
 
 const LOGO_SRC = '/Midia Blupa/logo.svg'
@@ -433,9 +434,9 @@ function GradientBorderButton({
       {...props}
     >
       <span
-        className={`blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-[148%] text-white ${innerClassName}`}
+        className={`blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-none text-white ${innerClassName}`}
       >
-        {children}
+        <span className="inline-block translate-y-0.5">{children}</span>
       </span>
     </button>
   )
@@ -455,13 +456,12 @@ function HeroGlassButton({
 }) {
   const innerSkin =
     variant === 'light'
-      ? `font-bold text-[#1A141F] shadow-[inset_0_1px_0_rgba(0,0,0,0.06)] ${innerClassName || 'bg-transparent'}`
+      ? `font-bold text-[#1A141F] ${innerClassName || 'bg-white/10'}`
       : `blupa-glass-face font-light text-white${innerClassName ? ` ${innerClassName}` : ''}`
   const lightLayout =
     variant === 'light'
       ? 'h-[56px] w-[271px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]'
-      : 'w-full max-w-[16.9375rem] shrink-0'
-  const innerY = variant === 'light' ? 'py-0' : 'py-4'
+      : 'h-[56px] w-full max-w-[16.9375rem] shrink-0'
   return (
     <button
       type="button"
@@ -469,9 +469,9 @@ function HeroGlassButton({
       {...props}
     >
       <span
-        className={`box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 font-sans text-base leading-[148%] ${innerY} ${innerSkin}`}
+        className={`box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base leading-none ${innerSkin}`}
       >
-        {children}
+        <span className="inline-block translate-y-0.5">{children}</span>
       </span>
     </button>
   )
@@ -535,7 +535,9 @@ function PartnerFlipCard({ label, image, objectPosition = 'center' }: { label: s
       </div>
     </div>
   )
-}function rotateBenefitQueue(
+}
+
+function rotateBenefitQueue(
   prev: BenefitId[],
   clickedSlotIndex: number,
 ): BenefitId[] {
@@ -549,10 +551,6 @@ function PartnerFlipCard({ label, image, objectPosition = 'center' }: { label: s
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
   const [heroSlide, setHeroSlide] = useState(0)
-  const [commEmail, setCommEmail] = useState(true)
-  const [commSms, setCommSms] = useState(true)
-  const [commWhatsapp, setCommWhatsapp] = useState(true)
-  const [termsAccepted, setTermsAccepted] = useState(false)
   const benefitsSectionRef = useRef<HTMLElement>(null)
   const [benefitsInView, setBenefitsInView] = useState(false)
   const [benefitQueue, setBenefitQueue] =
@@ -746,8 +744,8 @@ export default function App() {
               rel="noopener noreferrer"
               className="blupa-gradient-ring box-border inline-flex h-[42px] shrink-0 items-stretch rounded-[24px] p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
             >
-              <span className="blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-[148%] text-white">
-                Entrar
+              <span className="blupa-glass-face blupa-glass-face--flat box-border flex h-full min-h-0 items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base font-light leading-none text-white">
+                <span className="inline-block translate-y-0.5">Entrar</span>
               </span>
             </a>
             <GradientBorderButton
@@ -1265,162 +1263,7 @@ export default function App() {
             />
           </div>
 
-          {/* Card branco com formulário */}
-          <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 py-12 sm:py-16 lg:py-[60px] lg:pl-[312px] lg:pr-0">
-            <div className="w-full max-w-[992px] bg-white px-6 py-10 sm:px-12 sm:py-12 lg:px-[100px] lg:py-[60px]">
-
-              <form
-                className="flex w-full flex-col items-start gap-[48px]"
-                noValidate
-              >
-                {/* Título */}
-                <h2
-                  id="contato-heading"
-                  className="m-0 w-full font-sans text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold leading-[128%] text-[#1A141F] lg:text-[44px]"
-                >
-                  Desbloqueie os benefícios do Blupa
-                </h2>
-
-                {/* Campos */}
-                <div className="flex w-full flex-col gap-4">
-                  <input
-                    type="text"
-                    placeholder="Nome completo"
-                    className="h-[51px] w-full rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                  />
-                  <div className="flex gap-4">
-                    <input
-                      type="text"
-                      placeholder="CPF"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                    <input
-                      type="tel"
-                      placeholder="Celular"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                  </div>
-                  <div className="flex gap-4">
-                    <input
-                      type="email"
-                      placeholder="E-mail"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Confirmar e-mail"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                  </div>
-                  <div className="flex gap-4">
-                    <input
-                      type="password"
-                      placeholder="Senha"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                    <input
-                      type="password"
-                      placeholder="Confirmar senha"
-                      className="h-[51px] flex-1 rounded-[4px] bg-[#F3F7F9] px-5 font-sans text-[14px] font-light leading-[140%] text-[#04000B] placeholder-[#9D9D9C] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30"
-                    />
-                  </div>
-                </div>
-
-                {/* Bloqueio de segurança */}
-                <div className="flex w-full flex-col gap-6">
-
-                  {/* Comunicações */}
-                  <div className="flex w-full flex-wrap items-center justify-between gap-4 border-y border-[#F3F7F9] py-4">
-                    <span className="font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">
-                      Deseja receber nossas comunicações?
-                    </span>
-                    <div className="flex items-center gap-4">
-                      {(
-                        [
-                          { label: 'E-mail', value: commEmail, set: setCommEmail },
-                          { label: 'SMS',    value: commSms,   set: setCommSms   },
-                          { label: 'WhatsApp', value: commWhatsapp, set: setCommWhatsapp },
-                        ] as const
-                      ).map(({ label, value, set }) => (
-                        <div key={label} className="flex items-center gap-2">
-                          <span className="font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">{label}</span>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={value}
-                            aria-label={`Receber comunicações por ${label}`}
-                            onClick={() => set((v) => !v)}
-                            className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E]"
-                            style={{ backgroundColor: value ? '#1D3B6E' : '#E5E0EB' }}
-                          >
-                            {value ? (
-                              <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">Sim</span>
-                            ) : (
-                              <span className="absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">Não</span>
-                            )}
-                            <span
-                              className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${value ? 'left-[40px]' : 'left-[2px]'}`}
-                            />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Termos */}
-                  <div className="flex w-full items-center justify-between gap-8">
-                    <span className="font-sans text-[16px] font-light leading-[148%] text-[#1A141F]">
-                      Li e concordo com os{' '}
-                      <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">Termos de uso</a>
-                      {' '}e{' '}
-                      <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">Política de Privacidade</a>
-                    </span>
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={termsAccepted}
-                      aria-label="Aceitar termos de uso e política de privacidade"
-                      onClick={() => setTermsAccepted((v) => !v)}
-                      className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E]"
-                      style={{ backgroundColor: termsAccepted ? '#1D3B6E' : '#E5E0EB' }}
-                    >
-                      {termsAccepted ? (
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-white">Sim</span>
-                      ) : (
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[14px] font-light leading-[140%] text-[#1A141F]">Não</span>
-                      )}
-                      <span
-                        className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${termsAccepted ? 'left-[40px]' : 'left-[2px]'}`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="flex w-full justify-end drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-                    {termsAccepted ? (
-                      <button
-                        type="submit"
-                        className="blupa-gradient-ring cursor-pointer rounded-[24px] p-[1.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5]"
-                      >
-                        <span className="block whitespace-nowrap rounded-[22.5px] bg-white px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-[#1A141F]">
-                          Avançar
-                        </span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        disabled
-                        className="cursor-not-allowed rounded-[24px] border-2 border-[#D2D7DB] bg-[#9D9D9C] px-6 py-4 font-sans text-[16px] font-bold leading-[148%] text-[#D2D7DB] whitespace-nowrap"
-                      >
-                        Avançar
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </form>
-
-            </div>
-          </div>
+          <BlupaSignupFormCard />
 
           {/* Imagem mobile (abaixo do formulário) */}
           <div className="mt-0 h-64 w-full lg:hidden">
@@ -1454,14 +1297,14 @@ export default function App() {
 
               {/* Borda em gradiente + miolo sólido (sem glass); p-0 = colado ao anel */}
               <div
-                className="blupa-gradient-ring inline-flex max-w-full rounded-[26px] p-0 [--blupa-ring:2px] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                className="blupa-gradient-ring box-border inline-flex max-w-full rounded-[24px] p-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
               >
                 <button
                   type="button"
                   onClick={() => scrollToSection('contato')}
-                  className="box-border inline-flex h-[56px] shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[24px] bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-[148%] text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
+                  className="box-border flex h-[56px] min-h-0 min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[22.5px] border-none bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
                 >
-                  Quero fazer parte do Blupa
+                  <span className="inline-block translate-y-0.5">Quero fazer parte do Blupa</span>
                 </button>
               </div>
             </div>
@@ -1527,7 +1370,7 @@ export default function App() {
       <div className="mx-auto flex w-full max-w-[1096px] flex-col gap-[42px]">
 
         {/* Linha principal: logo+tagline + links rápidos à esquerda, com gap */}
-        <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:gap-10 lg:gap-16">
+        <div className="flex flex-col gap-16 sm:flex-row sm:items-start sm:gap-16 lg:gap-24">
 
           {/* Coluna: logo + tagline */}
           <div className="flex shrink-0 flex-col gap-16 lg:w-[408px]">
