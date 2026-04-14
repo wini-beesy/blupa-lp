@@ -36,6 +36,11 @@
   z-index: 1;
 }
 
+/* Fundo claro (ex.: modal): anel mais espesso para o gradiente ler bem. */
+.blupa-gradient-ring--on-light {
+  --blupa-ring: 3px;
+}
+
 /* Grayscale/Glass (Figma button-primary): branco 10% + vidro quando há blur. */
 .blupa-glass-face {
   background: rgba(255, 255, 255, 0.1);
