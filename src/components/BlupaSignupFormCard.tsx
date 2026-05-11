@@ -5,6 +5,7 @@ import {
   useState,
   type FormEvent,
 } from 'react'
+import { Link } from 'react-router-dom'
 import {
   initPublicCustomerSession,
   PublicCustomerApiError,
@@ -420,13 +421,19 @@ export function BlupaSignupFormCard() {
               <span className="min-w-0 shrink font-sans text-[16px] font-light leading-none text-[#1A141F]">
                 <span className="inline-block translate-y-0.5">
                   Li e concordo com os{' '}
-                  <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">
+                  <Link
+                    to="/termos-de-uso"
+                    className="font-bold text-[#1A141F] underline hover:opacity-70"
+                  >
                     Termos de uso
-                  </a>{' '}
+                  </Link>{' '}
                   e{' '}
-                  <a href="#" className="font-bold text-[#1A141F] underline hover:opacity-70">
+                  <Link
+                    to="/politica-de-privacidade"
+                    className="font-bold text-[#1A141F] underline hover:opacity-70"
+                  >
                     Política de Privacidade
-                  </a>
+                  </Link>
                 </span>
               </span>
               <button

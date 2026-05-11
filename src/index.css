@@ -115,6 +115,13 @@
 
 }
 
+/* Ancoras (#secção): scroll suave; JS usa o mesmo critério em `scroll-to-section.ts`. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Axiforma — WOFF2 em `src/assets/Axiforma-Font/WOFF2/` (Vite resolve os URLs no build). */
 @font-face {
   font-family: 'Axiforma';

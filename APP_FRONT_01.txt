@@ -1,0 +1,398 @@
+Page: Update Sidebar Section Title
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&f[]=general-sans@600,500&display=swap');
+    body {
+      font-family: 'Satoshi', sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: 'General Sans', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .image-snap-container {
+      scroll-snap-type: x mandatory;
+    }
+    .image-snap-item {
+      scroll-snap-align: start;
+    }
+    #sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+    #sidebar-menu.active {
+      transform: translateX(0);
+    }
+    #profile-screen.active {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="w-full h-screen flex flex-col bg-white relative">
+    <!-- Sidebar Backdrop -->
+    <div id="sidebar-overlay" onclick="closeAllOverlays()" class="fixed inset-0 bg-slate-900/40 z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Profile Screen -->
+    <div id="profile-screen" class="fixed inset-0 bg-slate-50 z-[80] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col overflow-y-auto no-scrollbar">
+      <header class="shrink-0 pt-12 px-5 pb-4 bg-white flex items-center justify-between">
+        <button onclick="toggleProfile()" class="w-10 h-10 -ml-2 flex items-center justify-center text-slate-900">
+          <iconify-icon icon="lucide:chevron-left" class="text-2xl"></iconify-icon>
+        </button>
+        <h2 class="text-lg font-bold text-slate-900">Meu perfil</h2>
+        <div class="w-10"></div>
+      </header>
+
+      <div class="relative">
+        <div class="h-40 bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-800 relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover opacity-60">
+          <button class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-600 shadow-sm">
+            <iconify-icon icon="lucide:edit-3" class="text-sm"></iconify-icon>
+          </button>
+        </div>
+        <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full border-4 border-white bg-white overflow-visible shadow-lg">
+          <div class="w-full h-full rounded-full border-4 border-blue-600 overflow-hidden relative">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-full h-full object-cover">
+            <button class="absolute bottom-0 right-1 w-6 h-6 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center text-white">
+              <iconify-icon icon="lucide:edit-2" class="text-[10px] style=""></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 px-6 text-center">
+        <p class="text-slate-500 text-sm mb-1">hz4jf9hspz@privaterelay.appleid.com</p>
+        <p class="text-slate-700 text-sm font-semibold mb-6">Microempreendedor - vreason Tecnologia</p>
+
+        <div class="flex gap-3 mb-8">
+          <button class="flex-1 h-12 rounded-lg border-2 border-blue-600 flex items-center justify-center gap-2 text-blue-600 font-bold text-sm bg-white">
+            <iconify-icon icon="lucide:settings" class="text-lg"></iconify-icon>
+            Configurações
+          </button>
+          <button class="flex-1 h-12 rounded-lg bg-blue-600 flex items-center justify-center gap-2 text-white font-bold text-sm">
+            <iconify-icon icon="lucide:edit-3" class="text-lg"></iconify-icon>
+            Meus dados
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="flex items-center gap-2">
+            <iconify-icon icon="lucide:rocket" class="text-blue-500 text-2xl"></iconify-icon>
+            <span class="text-lg font-bold text-slate-900">5 dias seguidos</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative flex items-center justify-center">
+              <iconify-icon icon="lucide:circle" class="text-blue-200 text-3xl"></iconify-icon>
+              <iconify-icon icon="lucide:circle-dot" class="text-blue-500 text-lg absolute"></iconify-icon>
+            </div>
+            <span class="text-lg font-bold text-slate-900">7 artigos lidos</span>
+          </div>
+        </div>
+
+        <p class="text-[13px] text-slate-400 text-left leading-relaxed mb-8">Leia 10 artigos para desbloquear seu feed totalmente personalizado.</p>
+
+        <div class="bg-white rounded-3xl p-6 shadow-sm text-left mb-10">
+          <h3 class="text-lg font-bold text-slate-900 mb-6">Minhas Conquistas</h3>
+          
+          <div class="flex flex-col gap-6">
+            <div class="flex gap-4">
+              <div class="w-14 h-14 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:award" class="text-2xl text-white"></iconify-icon>
+              </div>
+              <div class="flex-1">
+                <div class="flex justify-between mb-1">
+                  <h4 class="font-bold text-slate-900 text-sm">NOWledge Expert</h4>
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Nível 1</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-2">Leia 15 artigos</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="w-[46%] h-full bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-slate-400">7/15</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-14 h-14 rounded-xl bg-slate-900 flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:calendar-check" class="text-2xl text-white"></iconify-icon>
+              </div>
+              <div class="flex-1">
+                <div class="flex justify-between mb-1">
+                  <h4 class="font-bold text-slate-900 text-sm">Lifelong Learner</h4>
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Nível 1</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-2">Abra o app por 10 dias seguidos</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="w-[50%] h-full bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-slate-400">5/10</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-14 h-14 rounded-xl bg-teal-400 flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:mic-2" class="text-2xl text-white"></iconify-icon>
+              </div>
+              <div class="flex-1">
+                <div class="flex justify-between mb-1">
+                  <h4 class="font-bold text-slate-900 text-sm">Especialista em podcast</h4>
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Nível 1</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-2">Ouça 5 podcasts</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="w-[20%] h-full bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-slate-400">1/5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sidebar Drawer -->
+    <aside id="sidebar-menu" class="fixed top-0 left-0 w-[280px] h-full bg-slate-50 z-[70] transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col overflow-y-auto">
+      <div class="p-6 pb-20">
+        <div class="flex items-center justify-between mb-10 pt-4">
+          <div class="flex items-center gap-0.5">
+            <span class="text-3xl font-bold text-[#0056b3] tracking-tighter">.StartSe</span>
+            <iconify-icon icon="lucide:trending-up" class="text-blue-400 text-2xl ml-1"></iconify-icon>
+          </div>
+          <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200/50 text-slate-500">
+            <iconify-icon icon="lucide:x" class="text-xl"></iconify-icon>
+          </button>
+        </div>
+
+        <div class="mb-8">
+          <h3 class="text-[14px] font-bold text-[#2d5ea7] mb-4 px-2 tracking-tight">Serviços</h3>
+          <nav class="flex flex-col gap-1">
+            <a href="#" id="nav-inicio-link" class="flex items-center gap-4 px-4 py-3.5 bg-[#e1ecff] rounded-r-none -mr-6 text-[#1a1a1a] font-bold border-l-4 border-transparent active:scale-[0.98] transition-all">
+              <iconify-icon icon="lucide:home" class="text-xl text-[#1a1a1a]"></iconify-icon>
+              <span class="text-[16px]">Início</span>
+            </a>
+            <a href="#" id="nav-sua-city" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:map" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Sua City</span>
+            </a>
+            <a href="#" id="nav-ai-tools" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:brain" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">A.I Tools</span>
+            </a>
+            <a href="#" id="nav-assistencia" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:headset" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Assistência</span>
+            </a>
+            <a href="#" id="nav-play" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:play" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Play</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="mb-8">
+          <h3 class="text-[14px] font-bold text-[#2d5ea7] mb-4 px-2 tracking-tight">Para você</h3>
+          <nav class="flex flex-col gap-1">
+            <a href="#" id="nav-area-aluno" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:file-badge" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Área do aluno</span>
+            </a>
+            <a href="#" id="nav-formacoes" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:graduation-cap" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Formações</span>
+            </a>
+            <a href="#" id="nav-networking" class="flex items-center gap-4 px-4 py-3.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+              <iconify-icon icon="lucide:users" class="text-xl"></iconify-icon>
+              <span class="text-[16px]">Networking</span>
+            </a>
+          </nav>
+        </div>
+
+
+      </div>
+    </aside>
+
+    <header class="shrink-0 pt-14 px-5 pb-4 bg-white z-40">
+      <div class="relative flex justify-between items-center mb-6">
+        <button id="nav-menu-btn" onclick="toggleSidebar()" class="z-10 w-10 h-10 -ml-2 flex items-center justify-center rounded-full text-slate-900 hover:bg-slate-50 active:scale-95 transition-all">
+          <iconify-icon icon="lucide:menu" class="text-2xl"></iconify-icon>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-2xl font-display font-semibold tracking-tight" style="color: rgb(102, 134, 229); font-weight: 600;">CITY</h1>
+        <div class="z-10 flex items-center gap-1">
+          <button id="nav-notifications-btn" class="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-50 active:scale-95 transition-all">
+            <iconify-icon icon="lucide:bell" class="text-2xl"></iconify-icon>
+            <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+          </button>
+          <button id="nav-profile-btn" onclick="toggleProfile()" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 overflow-hidden active:scale-90 transition-transform">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-full h-full object-cover">
+          </button>
+        </div>
+      </div>
+      <div class="relative flex items-center h-12 bg-slate-100/80 rounded-2xl px-4 focus-within:bg-white focus-within:ring-1 focus-within:ring-slate-200 transition-all duration-300">
+        <iconify-icon icon="lucide:search" class="text-slate-400 text-lg mr-3"></iconify-icon>
+        <input type="text" placeholder="Pesquisar notícias..." class="flex-1 bg-transparent border-none outline-none text-[15px] font-medium placeholder:text-slate-400 text-slate-900">
+        <div class="flex items-center gap-1 ml-2">
+          <button id="qr-scanner-btn" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors">
+            <iconify-icon icon="lucide:qr-code" class="text-xl"></iconify-icon>
+          </button>
+          <div class="w-[1px] h-4 bg-slate-300 mx-1"></div>
+          <button id="voice-search-btn" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors">
+            <iconify-icon icon="lucide:mic" class="text-xl"></iconify-icon>
+          </button>
+        </div>
+      </div>
+      <div class="mt-5 flex overflow-x-auto no-scrollbar gap-2.5 pb-2">
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-900 text-white text-[13px] font-bold">Para você</button>
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 text-[13px] font-semibold hover:bg-slate-100 transition-colors">Tecnologia</button>
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 text-[13px] font-semibold hover:bg-slate-100 transition-colors">Esportes</button>
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 text-[13px] font-semibold hover:bg-slate-100 transition-colors">Entretenimento</button>
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 text-[13px] font-semibold hover:bg-slate-100 transition-colors">Negócios</button>
+        <button class="whitespace-nowrap px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 text-[13px] font-semibold hover:bg-slate-100 transition-colors">Saúde</button>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto pb-[34px]">
+      <div class="flex flex-col gap-6">
+        <!-- News Feed Items (preserved structure) -->
+        <article class="border-b border-slate-100 pb-4">
+          <div class="px-5 flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs shrink-0">JR</div>
+              <div><p class="text-[13px] font-bold text-slate-900 leading-none">Jornal Razão</p></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="px-4 py-1.5 rounded-full border border-slate-200 text-[13px] font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition-all">Seguir</button>
+              <button class="text-slate-400"><iconify-icon icon="lucide:more-vertical" class="text-xl"></iconify-icon></button>
+            </div>
+          </div>
+          <div class="overflow-x-auto no-scrollbar flex gap-1 px-5 image-snap-container">
+            <div class="min-w-[85%] h-56 rounded-xl bg-slate-100 overflow-hidden image-snap-item"><img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&amp;fit=crop&amp;w=600&amp;q=80" class="w-full h-full object-cover"></div>
+            <div class="min-w-[85%] h-56 rounded-xl bg-slate-100 overflow-hidden image-snap-item"><img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&amp;fit=crop&amp;w=600&amp;q=80" class="w-full h-full object-cover"></div>
+            <div class="min-w-[85%] h-56 rounded-xl bg-slate-100 overflow-hidden image-snap-item"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=600&amp;q=80" class="w-full h-full object-cover"></div>
+          </div>
+          <div class="px-5 mt-4">
+            <h2 class="text-[17px] font-bold text-slate-900 leading-snug mb-3">Padre organiza rifa, participa do sorteio e leva o carro ao sortear bilhete premiado em SC...</h2>
+            <div class="flex items-center justify-between"><span class="text-[13px] text-slate-400 font-medium">23 h</span>
+              <div class="flex items-center gap-5">
+                <button class="flex items-center text-slate-500 hover:text-red-500 transition-colors"><iconify-icon icon="lucide:heart" class="text-xl"></iconify-icon></button>
+                <button class="flex items-center text-slate-500 hover:text-blue-500 transition-colors"><iconify-icon icon="lucide:share-2" class="text-xl"></iconify-icon></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!-- Other articles preserved... -->
+        <article class="border-b border-slate-100 pb-4">
+          <div class="px-5 flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden shrink-0"><img src="https://api.dicebear.com/7.x/initials/svg?seed=ND&amp;backgroundColor=f1f5f9" class="w-full h-full object-cover"></div>
+              <div><p class="text-[13px] font-bold text-slate-900 leading-none">ND Mais</p></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="px-4 py-1.5 rounded-full border border-slate-200 text-[13px] font-semibold text-slate-700 hover:bg-slate-50">Seguir</button>
+              <button class="text-slate-400"><iconify-icon icon="lucide:more-vertical" class="text-xl"></iconify-icon></button>
+            </div>
+          </div>
+          <div class="px-5"><div class="w-full h-64 rounded-xl bg-slate-100 overflow-hidden"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&amp;fit=crop&amp;w=800&amp;q=80" class="w-full h-full object-cover"></div></div>
+          <div class="px-5 mt-4">
+            <h2 class="text-[17px] font-bold text-slate-900 leading-snug mb-3">Cidade de SC quer transformar rio famoso em corredor gastronômico para atrair turistas no verão</h2>
+            <div class="flex items-center justify-between"><span class="text-[13px] text-slate-400 font-medium">9 h</span>
+              <div class="flex items-center gap-5">
+                <button class="flex items-center text-slate-500 hover:text-red-500 transition-colors"><iconify-icon icon="lucide:heart" class="text-xl"></iconify-icon></button>
+                <button class="flex items-center text-slate-500 hover:text-blue-500 transition-colors"><iconify-icon icon="lucide:share-2" class="text-xl"></iconify-icon></button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="shrink-0 bg-white border-t border-slate-100 px-8 h-20 flex items-center justify-between pb-[34px] z-50">
+      <a href="#" id="foot-home" class="w-12 h-12 flex items-center justify-center text-slate-900"><iconify-icon icon="lucide:home" class="text-2xl"></iconify-icon></a>
+      <a href="#" id="foot-search" class="w-12 h-12 flex items-center justify-center text-slate-300"><iconify-icon icon="lucide:search" class="text-2xl"></iconify-icon></a>
+      <a href="#" id="foot-saved" class="w-12 h-12 flex items-center justify-center text-slate-300"><iconify-icon icon="lucide:bookmark" class="text-2xl"></iconify-icon></a>
+      <a href="#" id="foot-settings" class="w-12 h-12 flex items-center justify-center text-slate-300"><iconify-icon icon="lucide:settings" class="text-2xl"></iconify-icon></a>
+    </footer>
+  </div>
+
+  <script>
+    function closeAllOverlays() {
+      const sidebar = document.getElementById('sidebar-menu');
+      const profile = document.getElementById('profile-screen');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      sidebar.classList.remove('active');
+      profile.classList.remove('active');
+      overlay.classList.remove('active');
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        if (!sidebar.classList.contains('active') && !profile.classList.contains('active')) overlay.style.display = 'none';
+      }, 300);
+    }
+
+    function toggleProfile() {
+      const profile = document.getElementById('profile-screen');
+      const isActive = profile.classList.contains('active');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (isActive) {
+        profile.classList.remove('active');
+        overlay.classList.remove('active');
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.style.display = 'none', 300);
+      } else {
+        overlay.style.display = 'block';
+        setTimeout(() => {
+          profile.classList.add('active');
+          overlay.classList.add('active');
+          overlay.style.opacity = '1';
+        }, 10);
+      }
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar-menu');
+      const overlay = document.getElementById('sidebar-overlay');
+      const isActive = sidebar.classList.contains('active');
+      
+      if (isActive) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          if (!sidebar.classList.contains('active')) overlay.style.display = 'none';
+        }, 300);
+      } else {
+        overlay.style.display = 'block';
+        setTimeout(() => {
+          sidebar.classList.add('active');
+          overlay.classList.add('active');
+          overlay.style.opacity = '1';
+        }, 10);
+      }
+    }
+  </script>
+</body>
+</html>
+```
+
+Please reference this design and implement it into our codebase; Try to understand the structure, which part of our codebase is relevant and implement
