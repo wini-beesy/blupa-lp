@@ -553,10 +553,6 @@ export default function App() {
   const marcasBannerRef = useRef<HTMLElement>(null);
   const [marcasBannerBgOn, setMarcasBannerBgOn] = useState(false);
 
-  const heroSlidesLoaded = useAccumulatedRingIndices(
-    heroSlide,
-    HERO_SLIDES.length,
-  );
   const timelineSlidesLoaded = useAccumulatedRingIndices(
     timelineStep,
     TIMELINE_STEPS.length,
@@ -665,7 +661,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(
       () => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length),
       3000,
@@ -728,44 +723,81 @@ export default function App() {
               </div>
             </div>
 
-            <div className="relative z-0 flex min-h-[220px] min-w-0 flex-1 items-center justify-center overflow-hidden sm:min-h-[280px] lg:pointer-events-none lg:col-start-2 lg:row-start-1 lg:flex lg:h-full lg:min-h-0 lg:items-end lg:justify-end lg:overflow-visible lg:pb-2">
+            <div className="relative z-0 flex min-h-[220px] min-w-0 flex-1 items-center justify-center overflow-hidden sm:min-h-[280px] lg:pointer-events-none lg:col-start-2 lg:row-start-1 lg:flex lg:h-full lg:min-h-0 lg:items-center lg:justify-end lg:overflow-visible lg:pb-2">
               <div
-                className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:ml-auto lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-none lg:translate-x-[min(12vw,7.5rem)]"
+                className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-full overflow-hidden"
                 style={{
                   aspectRatio: `${HERO_INTRINSIC_W}/${HERO_INTRINSIC_H}`,
                 }}
               >
-                {HERO_SLIDES.map((src, i) =>
-                  heroSlidesLoaded.has(i) ? (
-                    <img
-                      key={src}
-                      src={src}
-                      alt=""
-                      width={HERO_INTRINSIC_W}
-                      height={HERO_INTRINSIC_H}
-                      className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
-                        i === heroSlide ? "opacity-100" : "opacity-0"
-                      }`}
-                      loading={i === heroSlide ? "eager" : "lazy"}
-                      fetchPriority={i === heroSlide ? "high" : "low"}
-                      decoding={i === heroSlide ? "sync" : "async"}
-                    />
-                  ) : (
-                    <div
-                      key={src}
-                      className={`absolute inset-0 bg-[#1A141F] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
-                        i === heroSlide ? "opacity-100" : "opacity-0"
-                      }`}
-                      aria-hidden
-                    />
-                  ),
-                )}
+                {/* Spacer image establishes intrinsic height when aspect-ratio alone is insufficient */}
+                <img
+                  src={HERO_SLIDES[0]}
+                  alt=""
+                  width={HERO_INTRINSIC_W}
+                  height={HERO_INTRINSIC_H}
+                  aria-hidden
+                  className="block w-full h-auto pointer-events-none select-none"
+                  style={{ visibility: "hidden" }}
+                  fetchPriority="high"
+                />
+                {HERO_SLIDES.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    width={HERO_INTRINSIC_W}
+                    height={HERO_INTRINSIC_H}
+                    className="absolute inset-0 h-full w-full object-contain object-center"
+                    style={{
+                      opacity: i === heroSlide ? 1 : 0,
+                      transition: "opacity 700ms ease-in-out",
+                    }}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                ))}
               </div>
             </div>
           </main>
+
+          <div className="flex justify-center pb-6 pt-0">
+            <button
+              type="button"
+              aria-label="Rolar para baixo"
+              onClick={() => scrollToSection("todo-dia")}
+              className="group flex flex-col items-center gap-0 text-white/40 transition-colors duration-200 hover:text-white/70"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6 animate-[scrollBounce_1.4s_ease-in-out_infinite]"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6 -mt-3 animate-[scrollBounce_1.4s_ease-in-out_0.2s_infinite]"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <section
+          id="todo-dia"
           className="relative z-20 w-full flex-shrink-0 bg-white text-[#1F1E17]"
           aria-labelledby="todo-dia-heading"
         >
@@ -832,7 +864,7 @@ export default function App() {
                   alt="Mulher sorridente com sacos de compras num centro comercial."
                   width={1066}
                   height={1600}
-                  className="absolute inset-x-[10px] top-1/2 h-[450px] -translate-y-1/2 rounded-r-[70px] object-cover object-center"
+                  className="absolute inset-x-[10px] inset-y-0 h-full rounded-r-[70px] object-cover object-center"
                   loading="lazy"
                   decoding="async"
                 />
