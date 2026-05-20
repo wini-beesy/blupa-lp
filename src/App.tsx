@@ -589,7 +589,7 @@ function PartnerCard({
       type="button"
       onClick={onClick}
       aria-label={`Ver benefícios de ${label}`}
-      className="partner-card group mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer overflow-hidden rounded-2xl border-none p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
+      className="partner-card group mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer overflow-hidden rounded-2xl border-none p-0 transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:shadow-[0_12px_32px_rgba(19,40,77,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
     >
       <div className="relative h-full w-full">
         <LazyInViewImg
@@ -734,10 +734,11 @@ function CategoryModal({
           {/* Right: search + close */}
           <div className="flex items-center gap-3">
             <div
-              className="blupa-gradient-ring relative box-border h-[39px] w-[388px] max-w-full shrink-0 rounded-[24px] p-[1.5px]"
+              className="relative box-border h-[39px] w-[388px] max-w-full shrink-0 rounded-[24px] p-[1px]"
+              style={{ background: "conic-gradient(from 78.23deg at 50% 50%, #BA5B9E -68.99deg, #EA5045 2.36deg, #FFCD00 26.67deg, #95C25D 70.16deg, #08B0A0 148.78deg, #2581C4 187.19deg, #1D3B6E 216.11deg, #8C4091 262.71deg, #BA5B9E 291.01deg, #EA5045 362.36deg)" }}
             >
               {/* White inner fill */}
-              <div className="flex h-full w-full items-center rounded-[22.5px] bg-white px-3">
+              <div className="flex h-full w-full items-center rounded-[23px] bg-white px-3">
                 <input
                   type="text"
                   value={search}
