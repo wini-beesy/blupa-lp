@@ -171,71 +171,9 @@
   }
 }
 
-/* Parceiros — cartão com flip 3D (hover / focus-visible) */
-.partner-flip-card {
-  perspective: 1400px;
-}
-
-.partner-flip-inner {
+/* Parceiros — cartão clicável (sem flip) */
+.partner-card {
   position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.partner-flip-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.partner-flip-face--back {
-  transform: rotateY(180deg);
-  background: #1a141f;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .partner-flip-card:hover .partner-flip-inner,
-  .partner-flip-card:focus-visible .partner-flip-inner {
-    transform: rotateY(180deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .partner-flip-inner {
-    transition: none;
-  }
-
-  .partner-flip-face--back {
-    transform: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-  }
-
-  .partner-flip-face--front {
-    transition: opacity 0.2s ease;
-  }
-
-  .partner-flip-card:hover .partner-flip-inner,
-  .partner-flip-card:focus-visible .partner-flip-inner {
-    transform: none;
-  }
-
-  .partner-flip-card:hover .partner-flip-face--front,
-  .partner-flip-card:focus-visible .partner-flip-face--front {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .partner-flip-card:hover .partner-flip-face--back,
-  .partner-flip-card:focus-visible .partner-flip-face--back {
-    opacity: 1;
-    pointer-events: auto;
-  }
 }
 
 /* Como funciona — imagem composta (Group 1–3) + sombra (Figma) */
