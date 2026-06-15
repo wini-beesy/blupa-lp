@@ -1,5 +1,6 @@
 /** Payload alinhado a `PublicCreateCustomerDto` no backend (sem campos extras — forbidNonWhitelisted). */
 export type PublicCreateCustomerBody = {
+  password: string
   name: string
   email: string
   cpf: string
@@ -28,7 +29,9 @@ export type PublicCustomerRegisterResponse = {
 function apiBase(): string {
   const raw = import.meta.env.VITE_API_BASE_URL as string | undefined
   const trimmed = raw?.trim().replace(/\/$/, '')
-  return trimmed && trimmed.length > 0 ? trimmed : 'http://localhost:3000'
+  if (trimmed && trimmed.length > 0) return trimmed
+  if (import.meta.env.DEV) return '/api'
+  return 'http://localhost:3000'
 }
 
 const GENERIC_INVALID_BODY =
