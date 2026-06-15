@@ -116,6 +116,98 @@ const TIMELINE_STEPS = [
   },
 ] as const;
 
+type CategoryBenefit = {
+  partner: string;
+  logo: string;
+  discount: string;
+};
+
+const CATEGORY_BENEFITS: Record<string, CategoryBenefit[]> = {
+  Automotivo: [
+    { partner: "Localiza", logo: "/logos-beneficios/localiza.png", discount: "10% OFF" },
+    { partner: "Unidas", logo: "/logos-beneficios/unidas.png", discount: "15% OFF" },
+    { partner: "Cintra Pneus", logo: "/logos-beneficios/cintra-pneus.png", discount: "12% OFF" },
+    { partner: "Lubrax+", logo: "/logos-beneficios/lubrax.png", discount: "10% OFF" },
+    { partner: "Auto Shopping", logo: "/logos-beneficios/auto-shopping.png", discount: "Até 20% OFF" },
+    { partner: "Gol Pneus", logo: "/logos-beneficios/gol-pneus.png", discount: "10% OFF" },
+  ],
+  "Beleza e Moda": [
+    { partner: "O Boticário", logo: "/logos-beneficios/o-boticario.png", discount: "15% OFF" },
+    { partner: "Quem Disse, Berenice?", logo: "/logos-beneficios/qdb.png", discount: "10% OFF" },
+    { partner: "Natura", logo: "/logos-beneficios/natura.png", discount: "12% OFF" },
+    { partner: "Avon", logo: "/logos-beneficios/avon.png", discount: "10% OFF" },
+    { partner: "Eudora", logo: "/logos-beneficios/eudora.png", discount: "15% OFF" },
+    { partner: "Arezzo", logo: "/logos-beneficios/arezzo.png", discount: "10% OFF" },
+  ],
+  "Casa e Decor": [
+    { partner: "Tok&Stok", logo: "/logos-beneficios/tok-stok.png", discount: "10% OFF" },
+    { partner: "MadeiraMadeira", logo: "/logos-beneficios/madeira-madeira.png", discount: "15% OFF" },
+    { partner: "Etna", logo: "/logos-beneficios/etna.png", discount: "10% OFF" },
+    { partner: "Camicado", logo: "/logos-beneficios/camicado.png", discount: "12% OFF" },
+    { partner: "Telhanorte", logo: "/logos-beneficios/telhanorte.png", discount: "8% OFF" },
+    { partner: "C&C", logo: "/logos-beneficios/cyc.png", discount: "10% OFF" },
+  ],
+  "Educação": [
+    { partner: "Estácio", logo: "/logos-beneficios/estacio.png", discount: "20% OFF" },
+    { partner: "Unip", logo: "/logos-beneficios/unip.png", discount: "15% OFF" },
+    { partner: "Pearson", logo: "/logos-beneficios/pearson.png", discount: "10% OFF" },
+    { partner: "Kumon", logo: "/logos-beneficios/kumon.png", discount: "10% OFF" },
+    { partner: "Wizard", logo: "/logos-beneficios/wizard.png", discount: "12% OFF" },
+    { partner: "CCAA", logo: "/logos-beneficios/ccaa.png", discount: "15% OFF" },
+  ],
+  "Entretenimento": [
+    { partner: "Aquário de São Paulo", logo: encodeURI("/logos-beneficios/Aquário de São Paulo 5.svg"), discount: "10% OFF" },
+    { partner: "Cinépolis", logo: encodeURI("/logos-beneficios/image 5.svg"), discount: "Ingresso por R$19,80" },
+    { partner: "Zoo SP", logo: encodeURI("/logos-beneficios/logo-zoo-large-color 1.svg"), discount: "20% OFF" },
+    { partner: "Horas Mágicas", logo: encodeURI("/logos-beneficios/Horas Mágicas 1.svg"), discount: "5% OFF" },
+    { partner: "Hot Park", logo: encodeURI("/logos-beneficios/logohotpark.png"), discount: "De 10% até 20% OFF" },
+    { partner: "Snowland", logo: encodeURI("/logos-beneficios/image-removebg-preview (14) 1.svg"), discount: "Até 15% OFF" },
+    { partner: "Roda Rico", logo: encodeURI("/logos-beneficios/image-removebg-preview (9) 1.svg"), discount: "15% OFF" },
+    { partner: "LEGO", logo: encodeURI("/logos-beneficios/image-removebg-preview (10) 1.svg"), discount: "10% OFF" },
+    { partner: "Animália Park", logo: encodeURI("/logos-beneficios/image-removebg-preview (11) 1.svg"), discount: "20% OFF" },
+  ],
+  "Farmácia e Saúde": [
+    { partner: "Drogasil", logo: "/logos-beneficios/drogasil.png", discount: "10% OFF" },
+    { partner: "Droga Raia", logo: "/logos-beneficios/droga-raia.png", discount: "10% OFF" },
+    { partner: "Ultrafarma", logo: "/logos-beneficios/ultrafarma.png", discount: "15% OFF" },
+    { partner: "Sempre Bem", logo: "/logos-beneficios/sempre-bem.png", discount: "12% OFF" },
+    { partner: "Dr. Consulta", logo: "/logos-beneficios/dr-consulta.png", discount: "20% OFF" },
+    { partner: "Hapvida", logo: "/logos-beneficios/hapvida.png", discount: "Condições especiais" },
+  ],
+  "Gastronomia": [
+    { partner: "iFood", logo: "/logos-beneficios/ifood.png", discount: "R$15 OFF" },
+    { partner: "Outback", logo: "/logos-beneficios/outback.png", discount: "10% OFF" },
+    { partner: "Subway", logo: "/logos-beneficios/subway.png", discount: "1 leve, 2 pague" },
+    { partner: "Madero", logo: "/logos-beneficios/madero.png", discount: "15% OFF" },
+    { partner: "Bob's", logo: "/logos-beneficios/bobs.png", discount: "10% OFF" },
+    { partner: "Giraffas", logo: "/logos-beneficios/giraffas.png", discount: "12% OFF" },
+  ],
+  "Lazer e Viagem": [
+    { partner: "Decolar", logo: "/logos-beneficios/decolar.png", discount: "Até 15% OFF" },
+    { partner: "CVC", logo: "/logos-beneficios/cvc.png", discount: "10% OFF" },
+    { partner: "Booking.com", logo: "/logos-beneficios/booking.png", discount: "12% OFF" },
+    { partner: "Maxmilhas", logo: "/logos-beneficios/maxmilhas.png", discount: "Bônus de milhas" },
+    { partner: "Hurb", logo: "/logos-beneficios/hurb.png", discount: "15% OFF" },
+    { partner: "VExpeditions", logo: "/logos-beneficios/vexpeditions.png", discount: "10% OFF" },
+  ],
+  "Petshop": [
+    { partner: "Petz", logo: "/logos-beneficios/petz.png", discount: "15% OFF" },
+    { partner: "Cobasi", logo: "/logos-beneficios/cobasi.png", discount: "10% OFF" },
+    { partner: "PetLove", logo: "/logos-beneficios/petlove.png", discount: "12% OFF" },
+    { partner: "Ração Total", logo: "/logos-beneficios/racao-total.png", discount: "10% OFF" },
+    { partner: "Mundo Animal", logo: "/logos-beneficios/mundo-animal.png", discount: "15% OFF" },
+    { partner: "Royal Canin", logo: "/logos-beneficios/royal-canin.png", discount: "8% OFF" },
+  ],
+  "Serviços": [
+    { partner: "Localfrio", logo: "/logos-beneficios/localfrio.png", discount: "15% OFF" },
+    { partner: "123Milhas", logo: "/logos-beneficios/123milhas.png", discount: "10% OFF" },
+    { partner: "TIM", logo: "/logos-beneficios/tim.png", discount: "Planos especiais" },
+    { partner: "Claro", logo: "/logos-beneficios/claro.png", discount: "Planos especiais" },
+    { partner: "Vivo", logo: "/logos-beneficios/vivo.png", discount: "Planos especiais" },
+    { partner: "Energia Total", logo: "/logos-beneficios/energia-total.png", discount: "12% OFF" },
+  ],
+};
+
 const PARTNER_CATEGORIES: readonly { label: string; image: string }[] = [
   {
     label: "Automotivo",
@@ -481,48 +573,291 @@ function TimelineAccordionChevron({ expanded }: { expanded: boolean }) {
   );
 }
 
-function PartnerFlipCard({
+function PartnerCard({
   label,
   image,
   objectPosition = "center",
+  onClick,
 }: {
   label: string;
   image: string;
   objectPosition?: string;
+  onClick: () => void;
 }) {
   return (
-    <div
-      className="partner-flip-card mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
-      tabIndex={0}
-      role="button"
-      aria-label={`${label}. Passe o rato ou o foco para ver a imagem da categoria.`}
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`Ver benefícios de ${label}`}
+      className="partner-card group mx-auto h-[358px] w-full max-w-[15.1rem] cursor-pointer overflow-hidden rounded-2xl border-none p-0 transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:shadow-[0_12px_32px_rgba(19,40,77,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2581c4]"
     >
-      <div className="partner-flip-inner">
-        <div className="partner-flip-face partner-flip-face--front">
-          <div className="blupa-gradient-ring box-border flex h-full w-full flex-col rounded-2xl p-[1.5px]">
-            <div className="flex h-full min-h-0 w-full items-center justify-center rounded-[calc(1rem-1.5px)] bg-white px-6 py-12">
-              <span className="text-center font-sans text-[22px] font-light leading-[144%] text-[#1A141F]">
-                {label}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="partner-flip-face partner-flip-face--back overflow-hidden">
-          <LazyInViewImg
-            wrapperClassName="absolute inset-0 block"
-            className="absolute inset-0 h-full w-full object-cover"
-            placeholderClassName="absolute inset-0 bg-[#1A141F]/35"
-            style={{ objectPosition }}
-            src={image}
-            alt=""
-            loading="lazy"
-            decoding="async"
+      <div className="relative h-full w-full">
+        <LazyInViewImg
+          wrapperClassName="absolute inset-0 block"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          placeholderClassName="absolute inset-0 bg-[#1A141F]/35"
+          style={{ objectPosition }}
+          src={image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-black/45 transition-colors duration-300 group-hover:bg-black/30" aria-hidden />
+        <span className="absolute inset-0 z-[1] flex items-center justify-center px-6 text-center font-sans text-[22px] font-light leading-[144%] text-white">
+          {label}
+        </span>
+      </div>
+    </button>
+  );
+}
+
+function CouponCard({ benefit }: { benefit: CategoryBenefit }) {
+  return (
+    <div
+      className="relative w-full"
+      style={{
+        aspectRatio: "300 / 132",
+        filter: "drop-shadow(0px 5px 5px rgba(19, 40, 77, 0.22))",
+      }}
+    >
+      <img
+        src="/Cupom.png"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full"
+        style={{ objectFit: "fill" }}
+      />
+      <div className="absolute inset-0 flex items-center justify-between px-8">
+        <div className="flex flex-1 items-center justify-center overflow-hidden pr-2">
+          <img
+            src={benefit.logo}
+            alt={benefit.partner}
+            className="max-h-[80px] max-w-[150px] object-contain"
           />
-          <div className="absolute inset-0 bg-black/45" aria-hidden />
-          <span className="absolute inset-0 z-[1] flex items-center justify-center px-6 text-center font-sans text-[22px] font-light leading-[144%] text-white">
-            {label}
+        </div>
+        <div className="flex w-[80px] shrink-0 items-center justify-center pl-1">
+          <span className="text-center font-sans text-[17px] font-bold leading-snug text-[#1A141F]">
+            {benefit.discount}
           </span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+const MODAL_PAGE_SIZE = 9;
+
+function CategoryModal({
+  category,
+  onClose,
+}: {
+  category: string;
+  onClose: () => void;
+}) {
+  const allBenefits = CATEGORY_BENEFITS[category] ?? [];
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+
+  const filtered = search.trim()
+    ? allBenefits.filter((b) =>
+        b.partner.toLowerCase().includes(search.trim().toLowerCase()),
+      )
+    : allBenefits;
+
+  const totalPages = Math.ceil(allBenefits.length / MODAL_PAGE_SIZE);
+  const visible = search.trim()
+    ? filtered
+    : allBenefits.slice(page * MODAL_PAGE_SIZE, (page + 1) * MODAL_PAGE_SIZE);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Vantagens exclusivas — ${category}`}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden
+      />
+
+      {/* Modal panel */}
+      <div
+        className="relative z-[1] flex w-full max-w-[1074px] flex-col rounded-3xl"
+        style={{
+          background: "#F3F7F9",
+          maxHeight: "90svh",
+        }}
+      >
+        {/* ── Scrollable area ───────────────────────────────────── */}
+        <div
+          className="flex flex-col gap-12 overflow-y-auto"
+          style={{ padding: "clamp(24px,5.6vw,60px) clamp(16px,6.7vw,72px) 32px" }}
+        >
+
+        {/* ── Header ───────────────────────────────────────────── */}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          {/* Left: logo + title */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <img
+              src={encodeURI("/Logo-Blupa_branco-cores_2000x730 2.svg")}
+              alt="Blupa"
+              className="h-[58px] w-[65px] shrink-0 object-contain"
+              style={{
+                filter: "drop-shadow(0px 15px 30px rgba(19,40,77,0.09))",
+              }}
+            />
+            <div className="flex flex-col gap-0.5">
+              <h2 className="m-0 font-sans text-[clamp(1.125rem,2.5vw,1.875rem)] font-bold leading-[120%] text-[#1A141F]">
+                Vantagens exclusivas
+              </h2>
+              <p className="m-0 font-sans text-[clamp(0.75rem,1.5vw,1rem)] font-light leading-[140%] text-[#1A141F]">
+                com marcas que você confia
+              </p>
+            </div>
+          </div>
+
+          {/* Right: search + close */}
+          <div className="flex items-center gap-3">
+            <div
+              className="relative box-border h-[39px] w-[388px] max-w-full shrink-0 rounded-[24px] p-[1px]"
+              style={{ background: "conic-gradient(from 78.23deg at 50% 50%, #BA5B9E -68.99deg, #EA5045 2.36deg, #FFCD00 26.67deg, #95C25D 70.16deg, #08B0A0 148.78deg, #2581C4 187.19deg, #1D3B6E 216.11deg, #8C4091 262.71deg, #BA5B9E 291.01deg, #EA5045 362.36deg)" }}
+            >
+              {/* White inner fill */}
+              <div className="flex h-full w-full items-center rounded-[23px] bg-white px-3">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(0);
+                  }}
+                  placeholder="Buscar"
+                  className="h-full flex-1 bg-transparent font-sans text-[14px] font-light leading-[140%] text-[#1A141F] placeholder-[#9D9D9C] outline-none"
+                  aria-label="Buscar parceiro"
+                />
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="shrink-0"
+                  aria-hidden
+                >
+                  <circle cx="11" cy="11" r="8" stroke="#9D9D9C" strokeWidth="1.5" />
+                  <path
+                    d="m21 21-4.35-4.35"
+                    stroke="#9D9D9C"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ── Category + grid ───────────────────────────────────── */}
+        <div className="flex flex-col gap-8">
+          {/* Category label */}
+          <div className="flex items-center gap-2">
+            <img src="/ingresso_icon.svg" alt="" aria-hidden width={18} height={14} />
+            <span className="font-sans text-[22px] font-bold leading-[124%] text-[#1A141F]">
+              {category}
+            </span>
+          </div>
+
+          {/* Coupon grid */}
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {visible.map((b) => (
+              <CouponCard key={b.partner} benefit={b} />
+            ))}
+            {visible.length === 0 && (
+              <p className="col-span-3 py-8 text-center font-sans text-sm font-light text-[#999]">
+                Nenhum resultado encontrado.
+              </p>
+            )}
+          </div>
+        </div>
+
+        </div>{/* end scrollable area */}
+
+        {/* ── Pagination — pinned to modal bottom ───────────────── */}
+        {!search.trim() && (
+          <div
+            className="flex shrink-0 items-center justify-center gap-[5px] rounded-b-3xl py-5"
+            style={{ background: "#F3F7F9" }}
+          >
+            {/* Prev */}
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+              aria-label="Página anterior"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-[0px_15px_30px_rgba(19,40,77,0.09)] transition-opacity disabled:opacity-40"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="M10 12 6 8l4-4" stroke="#1A141F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            {/* Page numbers */}
+            {Array.from({ length: totalPages }, (_, i) => {
+              const isActive = page === i;
+              const show =
+                totalPages <= 5 ||
+                i === 0 ||
+                i === totalPages - 1 ||
+                Math.abs(i - page) <= 1;
+              const isDot =
+                totalPages > 5 &&
+                ((i === 1 && page > 2) || (i === totalPages - 2 && page < totalPages - 3));
+              if (!show && !isDot) return null;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setPage(i)}
+                  aria-label={`Página ${i + 1}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex h-8 w-8 items-center justify-center font-sans text-[13px] font-semibold shadow-[0px_15px_30px_rgba(19,40,77,0.09)] transition-colors ${
+                    isDot ? "rounded-lg" : "rounded-full"
+                  } ${isActive ? "bg-[#3F5680] text-white" : "bg-white text-[#1A141F]"}`}
+                >
+                  {isDot ? "…" : i + 1}
+                </button>
+              );
+            })}
+
+            {/* Next */}
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={page === totalPages - 1}
+              aria-label="Próxima página"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-[0px_15px_30px_rgba(19,40,77,0.09)] transition-opacity disabled:opacity-40"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="M6 4l4 4-4 4" stroke="#1A141F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -548,15 +883,12 @@ export default function App() {
   );
   const [timelineStep, setTimelineStep] = useState(0);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const comoFuncionaRef = useRef<HTMLDivElement>(null);
   const timelineRotateRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const marcasBannerRef = useRef<HTMLElement>(null);
   const [marcasBannerBgOn, setMarcasBannerBgOn] = useState(false);
 
-  const heroSlidesLoaded = useAccumulatedRingIndices(
-    heroSlide,
-    HERO_SLIDES.length,
-  );
   const timelineSlidesLoaded = useAccumulatedRingIndices(
     timelineStep,
     TIMELINE_STEPS.length,
@@ -665,7 +997,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(
       () => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length),
       3000,
@@ -728,44 +1059,81 @@ export default function App() {
               </div>
             </div>
 
-            <div className="relative z-0 flex min-h-[220px] min-w-0 flex-1 items-center justify-center overflow-hidden sm:min-h-[280px] lg:pointer-events-none lg:col-start-2 lg:row-start-1 lg:flex lg:h-full lg:min-h-0 lg:items-end lg:justify-end lg:overflow-visible lg:pb-2">
+            <div className="relative z-0 flex min-h-[220px] min-w-0 flex-1 items-center justify-center overflow-hidden sm:min-h-[280px] lg:pointer-events-none lg:col-start-2 lg:row-start-1 lg:flex lg:h-full lg:min-h-0 lg:items-center lg:justify-end lg:overflow-visible lg:pb-2">
               <div
-                className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:ml-auto lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-none lg:translate-x-[min(12vw,7.5rem)]"
+                className="relative mb-10 w-full max-h-[min(70.65vh,463px)] max-w-[min(100%,573px)] sm:max-h-[min(74.97vh,529px)] sm:max-w-[min(100%,662px)] lg:mb-0 lg:max-h-[min(50.72rem,79.38svh)] lg:max-w-full overflow-hidden"
                 style={{
                   aspectRatio: `${HERO_INTRINSIC_W}/${HERO_INTRINSIC_H}`,
                 }}
               >
-                {HERO_SLIDES.map((src, i) =>
-                  heroSlidesLoaded.has(i) ? (
-                    <img
-                      key={src}
-                      src={src}
-                      alt=""
-                      width={HERO_INTRINSIC_W}
-                      height={HERO_INTRINSIC_H}
-                      className={`absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:object-right ${
-                        i === heroSlide ? "opacity-100" : "opacity-0"
-                      }`}
-                      loading={i === heroSlide ? "eager" : "lazy"}
-                      fetchPriority={i === heroSlide ? "high" : "low"}
-                      decoding={i === heroSlide ? "sync" : "async"}
-                    />
-                  ) : (
-                    <div
-                      key={src}
-                      className={`absolute inset-0 bg-[#1A141F] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
-                        i === heroSlide ? "opacity-100" : "opacity-0"
-                      }`}
-                      aria-hidden
-                    />
-                  ),
-                )}
+                {/* Spacer image establishes intrinsic height when aspect-ratio alone is insufficient */}
+                <img
+                  src={HERO_SLIDES[0]}
+                  alt=""
+                  width={HERO_INTRINSIC_W}
+                  height={HERO_INTRINSIC_H}
+                  aria-hidden
+                  className="block w-full h-auto pointer-events-none select-none"
+                  style={{ visibility: "hidden" }}
+                  fetchPriority="high"
+                />
+                {HERO_SLIDES.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    width={HERO_INTRINSIC_W}
+                    height={HERO_INTRINSIC_H}
+                    className="absolute inset-0 h-full w-full object-contain object-center"
+                    style={{
+                      opacity: i === heroSlide ? 1 : 0,
+                      transition: "opacity 700ms ease-in-out",
+                    }}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                ))}
               </div>
             </div>
           </main>
+
+          <div className="flex justify-center pb-6 pt-0">
+            <button
+              type="button"
+              aria-label="Rolar para baixo"
+              onClick={() => scrollToSection("todo-dia")}
+              className="group flex flex-col items-center gap-0 text-white/40 transition-colors duration-200 hover:text-white/70"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6 animate-[scrollBounce_1.4s_ease-in-out_infinite]"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6 -mt-3 animate-[scrollBounce_1.4s_ease-in-out_0.2s_infinite]"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <section
+          id="todo-dia"
           className="relative z-20 w-full flex-shrink-0 bg-white text-[#1F1E17]"
           aria-labelledby="todo-dia-heading"
         >
@@ -832,7 +1200,7 @@ export default function App() {
                   alt="Mulher sorridente com sacos de compras num centro comercial."
                   width={1066}
                   height={1600}
-                  className="absolute inset-x-[10px] top-1/2 h-[450px] -translate-y-1/2 rounded-r-[70px] object-cover object-center"
+                  className="absolute inset-x-[10px] inset-y-0 h-full rounded-r-[70px] object-cover object-center"
                   loading="lazy"
                   decoding="async"
                 />
@@ -977,13 +1345,14 @@ export default function App() {
             <div className="flex w-full max-w-[1240px] flex-col gap-4">
               <div className="grid w-full grid-cols-2 justify-items-center gap-x-2 gap-y-4 sm:grid-cols-3 md:grid-cols-5">
                 {PARTNER_CATEGORIES.map((c) => (
-                  <PartnerFlipCard
+                  <PartnerCard
                     key={c.label}
                     label={c.label}
                     image={c.image}
                     objectPosition={
                       c.label === "Automotivo" ? "25% center" : "center"
                     }
+                    onClick={() => setSelectedCategory(c.label)}
                   />
                 ))}
               </div>
@@ -1417,6 +1786,13 @@ export default function App() {
           </div>
         </footer>
       </div>
+
+      {selectedCategory && (
+        <CategoryModal
+          category={selectedCategory}
+          onClose={() => setSelectedCategory(null)}
+        />
+      )}
     </div>
   );
 }
