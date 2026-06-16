@@ -1,3 +1,5 @@
+export type PacoGroupLink = 'client' | 'collaborator'
+
 /** Payload alinhado a `PublicCreateCustomerDto` no backend (sem campos extras — forbidNonWhitelisted). */
 export type PublicCreateCustomerBody = {
   name: string
@@ -16,6 +18,10 @@ export type PublicCreateCustomerBody = {
   street?: string | null
   complement?: string | null
   number?: string | null
+  /** Vínculo Grupo Paco */
+  hasPacoGroupLink?: boolean
+  pacoGroupLink?: PacoGroupLink | null
+  pacoClientId?: string | null
 }
 
 export type PublicCustomerSessionResponse = { ok: true; csrfToken: string }
