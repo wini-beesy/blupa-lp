@@ -331,23 +331,102 @@ export function BlupaSignupFormCard() {
             Desbloqueie os benefícios do Blupa
           </h2>
 
-          {sessionError ? (
-            <div
-              className="w-full rounded-[4px] bg-[#FEF2F2] px-4 py-3 font-sans text-[14px] font-light text-[#991B1B]"
-              role="alert"
-            >
-              <p className="m-0">
-                {sessionError}{" "}
-                <button
-                  type="button"
-                  className="cursor-pointer border-none bg-transparent font-sans text-[14px] font-bold text-[#1D3B6E] underline"
-                  onClick={() => void ensureSession()}
-                >
-                  Tentar novamente
-                </button>
-              </p>
+
+          {/* ── Vínculo Grupo Paco ───────────────────────────────── */}
+          <div className="flex w-full flex-col gap-4 rounded-[8px] border border-[#F3F7F9] bg-[#F3F7F9] px-5 py-4">
+            {/* Switch principal */}
+            <div className="flex items-center justify-between gap-4">
+              <span className="font-sans text-[14px] font-light leading-snug text-[#1A141F]">
+                Possuo vínculo com o Grupo Paco
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={hasPacoGroupLink}
+                aria-label="Possuo vínculo com o Grupo Paco"
+                onClick={() => {
+                  setHasPacoGroupLink((v) => !v)
+                  setPacoGroupLink('')
+                  setPacoClientId('')
+                }}
+                disabled={submitting}
+                className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E] disabled:cursor-not-allowed disabled:opacity-60"
+                style={{ backgroundColor: hasPacoGroupLink ? '#1D3B6E' : '#E5E0EB' }}
+              >
+                {hasPacoGroupLink ? (
+                  <span className="pointer-events-none absolute left-2 top-0 flex h-full items-center font-sans text-[14px] font-light leading-none text-white">
+                    <span className="inline-block translate-y-0.5">Sim</span>
+                  </span>
+                ) : (
+                  <span className="pointer-events-none absolute right-2 top-0 flex h-full items-center font-sans text-[14px] font-light leading-none text-[#1A141F]">
+                    <span className="inline-block translate-y-0.5">Não</span>
+                  </span>
+                )}
+                <span
+                  className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${hasPacoGroupLink ? 'left-[40px]' : 'left-[2px]'}`}
+                />
+              </button>
             </div>
-          ) : null}
+
+            {/* Tipo de vínculo */}
+            {hasPacoGroupLink && (
+              <div className="flex flex-col gap-3">
+                <span className="font-sans text-[13px] font-light text-[#666]">
+                  Qual é o seu tipo de vínculo?
+                </span>
+                <div className="flex gap-3">
+                  {(
+                    [
+                      { value: 'collaborator', label: 'Colaborador' },
+                      { value: 'client', label: 'Cliente' },
+                    ] as const
+                  ).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => {
+                        setPacoGroupLink(value)
+                        setPacoClientId('')
+                      }}
+                      disabled={submitting}
+                      className={`flex h-[44px] flex-1 items-center justify-center rounded-[4px] border font-sans text-[14px] font-light transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 ${
+                        pacoGroupLink === value
+                          ? 'border-[#1D3B6E] bg-[#1D3B6E] text-white'
+                          : 'border-[#D2D7DB] bg-white text-[#1A141F] hover:border-[#1D3B6E]/50'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                {pacoGroupLink === 'client' && (
+                  <input
+                    type="text"
+                    placeholder="Código de cliente Paco"
+                    className={inputClass}
+                    value={pacoClientId}
+                    onChange={(ev) => setPacoClientId(ev.target.value)}
+                    disabled={submitting}
+                    maxLength={64}
+                    autoComplete="off"
+                  />
+                )}
+
+                {pacoGroupLink === 'collaborator' && (
+                  <p className="m-0 font-sans text-[13px] font-light leading-relaxed text-[#666]">
+                    Usaremos seu CPF para validação junto ao Grupo Paco.
+                  </p>
+                )}
+
+                {pacoGroupLink && (
+                  <p className="m-0 font-sans text-[13px] font-light leading-relaxed text-[#1D3B6E]">
+                    ⓘ Cadastros com vínculo Paco ficam inativos até aprovação. Você receberá um e-mail de confirmação.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
 
           <div className="flex w-full flex-col gap-4">
             <input
@@ -451,105 +530,6 @@ export function BlupaSignupFormCard() {
               }
               disabled={submitting}
             />
-          </div>
-
-          {/* ── Vínculo Grupo Paco ───────────────────────────────── */}
-          <div className="flex w-full flex-col gap-4 rounded-[8px] border border-[#F3F7F9] bg-[#F3F7F9] px-5 py-4">
-            {/* Switch principal */}
-            <div className="flex items-center justify-between gap-4">
-              <span className="font-sans text-[14px] font-light leading-snug text-[#1A141F]">
-                Possuo vínculo com o Grupo Paco
-              </span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={hasPacoGroupLink}
-                aria-label="Possuo vínculo com o Grupo Paco"
-                onClick={() => {
-                  setHasPacoGroupLink((v) => !v)
-                  setPacoGroupLink('')
-                  setPacoClientId('')
-                }}
-                disabled={submitting}
-                className="relative h-8 w-[70px] shrink-0 cursor-pointer rounded-full transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D3B6E] disabled:cursor-not-allowed disabled:opacity-60"
-                style={{ backgroundColor: hasPacoGroupLink ? '#1D3B6E' : '#E5E0EB' }}
-              >
-                {hasPacoGroupLink ? (
-                  <span className="pointer-events-none absolute left-2 top-0 flex h-full items-center font-sans text-[14px] font-light leading-none text-white">
-                    <span className="inline-block translate-y-0.5">Sim</span>
-                  </span>
-                ) : (
-                  <span className="pointer-events-none absolute right-2 top-0 flex h-full items-center font-sans text-[14px] font-light leading-none text-[#1A141F]">
-                    <span className="inline-block translate-y-0.5">Não</span>
-                  </span>
-                )}
-                <span
-                  className={`absolute top-[2px] h-7 w-7 rounded-full bg-white shadow-[0px_3px_8px_rgba(0,0,0,0.15),0px_3px_1px_rgba(0,0,0,0.06)] transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${hasPacoGroupLink ? 'left-[40px]' : 'left-[2px]'}`}
-                />
-              </button>
-            </div>
-
-            {/* Tipo de vínculo */}
-            {hasPacoGroupLink && (
-              <div className="flex flex-col gap-3">
-                <span className="font-sans text-[13px] font-light text-[#666]">
-                  Qual é o seu tipo de vínculo?
-                </span>
-                <div className="flex gap-3">
-                  {(
-                    [
-                      { value: 'collaborator', label: 'Colaborador' },
-                      { value: 'client', label: 'Cliente' },
-                    ] as const
-                  ).map(({ value, label }) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => {
-                        setPacoGroupLink(value)
-                        setPacoClientId('')
-                      }}
-                      disabled={submitting}
-                      className={`flex h-[44px] flex-1 items-center justify-center rounded-[4px] border font-sans text-[14px] font-light transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 ${
-                        pacoGroupLink === value
-                          ? 'border-[#1D3B6E] bg-[#1D3B6E] text-white'
-                          : 'border-[#D2D7DB] bg-white text-[#1A141F] hover:border-[#1D3B6E]/50'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Campo código de cliente */}
-                {pacoGroupLink === 'client' && (
-                  <input
-                    type="text"
-                    placeholder="Código de cliente Paco"
-                    className={inputClass}
-                    value={pacoClientId}
-                    onChange={(ev) => setPacoClientId(ev.target.value)}
-                    disabled={submitting}
-                    maxLength={64}
-                    autoComplete="off"
-                  />
-                )}
-
-                {/* Info colaborador */}
-                {pacoGroupLink === 'collaborator' && (
-                  <p className="m-0 font-sans text-[13px] font-light leading-relaxed text-[#666]">
-                    Usaremos seu CPF para validação junto ao Grupo Paco.
-                  </p>
-                )}
-
-                {/* Aviso pendência aprovação */}
-                {pacoGroupLink && (
-                  <p className="m-0 font-sans text-[13px] font-light leading-relaxed text-[#1D3B6E]">
-                    ⓘ Cadastros com vínculo Paco ficam inativos até aprovação. Você receberá um e-mail de confirmação.
-                  </p>
-                )}
-              </div>
-            )}
           </div>
 
           <div className="flex w-full flex-col gap-6">
@@ -675,7 +655,7 @@ export function BlupaSignupFormCard() {
               {termsAccepted ? (
                 <button
                   type="submit"
-                  disabled={submitting || !!sessionError}
+                  disabled={submitting}
                   className="blupa-gradient-ring blupa-gradient-ring--on-light box-border flex h-[56px] shrink-0 cursor-pointer items-stretch rounded-[24px] border-none p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <span className="box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white px-6 font-sans text-base font-bold leading-none text-[#1A141F]">
