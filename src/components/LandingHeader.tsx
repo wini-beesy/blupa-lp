@@ -5,7 +5,7 @@ import { GradientBorderButton } from './GradientBorderButton'
 import { scrollToSection } from '../lib/scroll-to-section'
 
 const LOGO_SRC = '/Midia Blupa/logo.svg'
-const LOGIN_URL = 'https://clube.blupa.com.br/member/login'
+const LOGIN_URL = 'https://painel.blupa.com.br/clube/login'
 
 function ChevronDown({ className }: { className?: string }) {
   return (

@@ -14,7 +14,7 @@ import {
 } from "../api/publicCustomer";
 
 /** Mesmo destino do CTA “Entrar” no header (`App.tsx`). */
-const MEMBER_LOGIN_HREF = "https://clube.blupa.com.br/member/login";
+const MEMBER_LOGIN_HREF = "https://painel.blupa.com.br/clube/login";
 
 const inputClass =
   "box-border h-[51px] w-full rounded-[4px] bg-[#F3F7F9] px-5 py-0 font-sans text-[14px] font-light leading-[51px] text-[#04000B] placeholder-[#9D9D9C] [font-variant-ligatures:none] outline-none transition-shadow duration-200 focus:ring-2 focus:ring-[#1D3B6E]/30";
