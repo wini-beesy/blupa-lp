@@ -106,7 +106,7 @@ export function BlupaSignupFormCard() {
   const [birthDate, setBirthDate] = useState("");
 
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const [sessionError, setSessionError] = useState<string | null>(null);
+  const [, setSessionError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
