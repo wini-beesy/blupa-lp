@@ -5,7 +5,7 @@ import { GradientBorderButton } from './GradientBorderButton'
 import { scrollToSection } from '../lib/scroll-to-section'
 
 const LOGO_SRC = '/Midia Blupa/logo.svg'
-const LOGIN_URL = 'https://painel.blupa.com.br/clube/login'
+const LOGIN_URL = 'https://clube.blupa.com.br/member/login'
 
 function ChevronDown({ className }: { className?: string }) {
   return (
@@ -104,9 +104,9 @@ function LandingHeaderDesktop() {
         <GradientBorderButton
           innerClassName="whitespace-nowrap"
           className="h-[42px] shrink-0 cursor-pointer"
-          onClick={() => scrollToSection('contato')}
+          href="https://clube.blupa.com.br/member/register"
         >
-          Assinar
+          Criar conta
         </GradientBorderButton>
         <a
           href={LOGIN_URL}
@@ -200,12 +200,9 @@ function LandingHeaderMobile({
                   <GradientBorderButton
                     innerClassName="w-full min-w-0 justify-center whitespace-nowrap px-6 text-base"
                     className="flex h-[42px] w-full min-w-0 shrink-0"
-                    onClick={() => {
-                      close()
-                      scrollToSection('contato')
-                    }}
+                    href="https://clube.blupa.com.br/member/register"
                   >
-                    Inscrição
+                    Criar conta
                   </GradientBorderButton>
                 </div>
               </div>

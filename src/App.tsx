@@ -13,7 +13,6 @@ import {
 } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
-import { BlupaSignupFormCard } from "./components/BlupaSignupFormCard";
 import { LandingHeader } from "./components/LandingHeader";
 import { scrollToSection } from "./lib/scroll-to-section";
 import { prefetchLandingMediaUrls } from "./prefetchLandingMedia";
@@ -517,17 +516,21 @@ function LazyInViewImg({
   );
 }
 
+const REGISTER_URL = "https://clube.blupa.com.br/member/register";
+
 /** Hero CTA — anel colorido `blupa-gradient-ring` + interior `blupa-glass-face` (Figma Grayscale/Glass no escuro). */
 function HeroGlassButton({
   children,
   className = "",
   innerClassName = "",
   variant = "dark",
+  href,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   variant?: "dark" | "light";
   innerClassName?: string;
+  href?: string;
 }) {
   const innerSkin =
     variant === "light"
@@ -537,17 +540,33 @@ function HeroGlassButton({
     variant === "light"
       ? "h-[56px] w-[271px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
       : "h-[56px] w-full max-w-[16.9375rem] shrink-0";
+  const sharedClass = `blupa-gradient-ring box-border flex cursor-pointer items-stretch rounded-[24px] border-none p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${lightLayout} ${className}`;
+  const inner = (
+    <span
+      className={`box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base leading-none ${innerSkin}`}
+    >
+      <span className="inline-block translate-y-0.5">{children}</span>
+    </span>
+  );
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={sharedClass}
+      >
+        {inner}
+      </a>
+    );
+  }
   return (
     <button
       type="button"
-      className={`blupa-gradient-ring box-border flex cursor-pointer items-stretch rounded-[24px] border-none p-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-90 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#84d0f5] ${lightLayout} ${className}`}
+      className={sharedClass}
       {...props}
     >
-      <span
-        className={`box-border flex h-full min-h-0 w-full items-center justify-center whitespace-nowrap rounded-[22.5px] px-6 py-0 font-sans text-base leading-none ${innerSkin}`}
-      >
-        <span className="inline-block translate-y-0.5">{children}</span>
-      </span>
+      {inner}
     </button>
   );
 }
@@ -1050,10 +1069,7 @@ export default function App() {
               </p>
 
               <div className="landing-rise landing-rise-delay-4 relative z-40 flex flex-row flex-wrap items-center gap-5">
-                <HeroGlassButton
-                  type="button"
-                  onClick={() => scrollToSection("contato")}
-                >
+                <HeroGlassButton href={REGISTER_URL}>
                   Quero fazer parte do Blupa
                 </HeroGlassButton>
               </div>
@@ -1166,7 +1182,7 @@ export default function App() {
                   type="button"
                   variant="light"
                   innerClassName="bg-[#F3F7F9]"
-                  onClick={() => scrollToSection("contato")}
+                  href={REGISTER_URL}
                 >
                   Quero fazer parte do Blupa
                 </HeroGlassButton>
@@ -1315,9 +1331,8 @@ export default function App() {
                 usar quando fizer sentido para você.
               </p>
               <HeroGlassButton
-                type="button"
                 variant="light"
-                onClick={() => scrollToSection("contato")}
+                href={REGISTER_URL}
               >
                 Quero fazer parte do Blupa
               </HeroGlassButton>
@@ -1527,69 +1542,65 @@ export default function App() {
               }}
             >
               {/* Card 1 — Clientes Grupo Paco */}
-              <div className="flex flex-1 flex-col justify-start bg-[#0067AB] px-[50px] pb-[30px] pt-[35px]">
-                <p className="m-0 mb-3 font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
-                  Clientes Paco
-                </p>
-                <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/80 lg:text-[16px]">
-                  Seu benefício agora vai além. Além dos produtos que você já
-                  assina, você passa a ter gratuitamente acesso a um clube
-                  completo de benefícios.
-                </p>
-                <a
-                  href="https://grupo-paco.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex flex-row items-center gap-2 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-bold leading-none text-white no-underline outline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-white/50 lg:text-[16px]"
-                >
-                  Ver produtos Paco
-                  <ArrowRightIcon
-                    className="h-[1em] w-[1em] shrink-0 text-white"
-                    aria-hidden
-                  />
-                </a>
+              <div className="flex flex-1 flex-col justify-between bg-[#0067AB] px-[50px] pb-[35px] pt-[35px]">
+                <div>
+                  <p className="m-0 mb-3 min-h-[58px] font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
+                    Clientes Paco
+                  </p>
+                  <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/80 lg:text-[16px]">
+                    Seu benefício agora vai além. Além dos produtos que você já
+                    assina, você passa a ter gratuitamente acesso a um clube
+                    completo de benefícios.
+                  </p>
+                  <a
+                    href="https://grupo-paco.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex flex-row items-center gap-2 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-bold leading-none text-white no-underline outline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-white/50 lg:text-[16px]"
+                  >
+                    Ver produtos Paco
+                    <ArrowRightIcon
+                      className="h-[1em] w-[1em] shrink-0 text-white"
+                      aria-hidden
+                    />
+                  </a>
+                </div>
+                <div className="landing-rise landing-rise-delay-4 relative z-40 flex flex-row flex-wrap items-center gap-5 mt-8">
+                  <HeroGlassButton href={REGISTER_URL}>
+                    Ativar meu Blupa
+                  </HeroGlassButton>
+                </div>
+              </div>
+
+              {/* Card 2 — Colaborador Grupo Paco */}
+              <div className="flex flex-1 flex-col justify-between bg-[#9FC031] px-[50px] pb-[35px] pt-[35px]">
+                <div>
+                  <p className="m-0 mb-3 min-h-[58px] font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
+                    Colaborador Paco
+                  </p>
+                  <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/90 lg:text-[16px]">
+                    Como colaborador, basta ativar seu cadastro para aproveitar um clube completo de vantagens pensado para você.
+                  </p>
+                </div>
                 <div className="landing-rise landing-rise-delay-4 relative z-40 flex flex-row flex-wrap items-center gap-5 mt-8">
                   <HeroGlassButton
-                    type="button"
-                    onClick={() => scrollToSection("contato")}
+                    innerClassName="blupa-glass-face--flat"
+                    href={REGISTER_URL}
                   >
                     Ativar meu Blupa
                   </HeroGlassButton>
-                </div>{" "}
-              </div>
-
-              {/* Card 2 — Não é cliente Grupo Paco */}
-              <div className="flex flex-1 flex-col justify-start bg-[#9FC031] px-[50px] pb-[50px] pt-[50px]">
-                <p className="m-0 mb-3 font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
-                  Não assina produto Paco?
-                </p>
-                <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/90 lg:text-[16px]">
-                  Sem problema!
-                  <br />
-                  Você também pode aproveitar tudo isso por apenas{" "}
-                  <strong className="font-bold text-white">R$19,90/mês</strong>
-                </p>
-                <div className="landing-rise landing-rise-delay-4 relative z-40 flex flex-row flex-wrap items-center gap-5 mt-10">
-                  <HeroGlassButton
-                    type="button"
-                    innerClassName="blupa-glass-face--flat"
-                    onClick={() => scrollToSection("contato")}
-                  >
-                    Assinar o Blupa
-                  </HeroGlassButton>
-                </div>{" "}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── Sétima seção: Faça parte do Blupa (formulário) ───────────────── */}
+        {/* ── Sétima seção: Faça parte do Blupa (formulário) — desativada temporariamente ───
         <section
           id="contato"
           className="relative w-full overflow-hidden bg-[#1D3B6E]"
           aria-labelledby="contato-heading"
         >
-          {/* Imagem de fundo — lado direito (45% → 100%) */}
           <div
             className="absolute inset-y-0 right-0 hidden w-[55%] lg:block"
             aria-hidden
@@ -1605,7 +1616,6 @@ export default function App() {
 
           <BlupaSignupFormCard />
 
-          {/* Imagem mobile (abaixo do formulário) */}
           <div className="mt-0 h-64 w-full lg:hidden">
             <img
               src={sétimaAsset(
@@ -1618,6 +1628,8 @@ export default function App() {
             />
           </div>
         </section>
+        ── */}
+        <section id="contato" aria-hidden />
 
         {/* ── FAQ ──────────────────────────────────────────────────────────── */}
         <section className="w-full bg-white" aria-labelledby="faq-heading">
@@ -1633,15 +1645,16 @@ export default function App() {
 
               {/* Borda em gradiente + miolo sólido (sem glass); p-0 = colado ao anel */}
               <div className="blupa-gradient-ring box-border inline-flex max-w-full rounded-[24px] p-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection("contato")}
-                  className="box-border flex h-[56px] min-h-0 min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[22.5px] border-none bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
+                <a
+                  href={REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="box-border flex h-[56px] min-h-0 min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[22.5px] border-none bg-[#1A141F] px-6 font-sans text-[16px] font-bold leading-none text-white no-underline transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1A141F]"
                 >
                   <span className="inline-block translate-y-0.5">
                     Quero fazer parte do Blupa
                   </span>
-                </button>
+                </a>
               </div>
             </div>
 
