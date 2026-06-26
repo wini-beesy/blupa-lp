@@ -1547,7 +1547,7 @@ export default function App() {
                   <p className="m-0 mb-3 min-h-[58px] font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
                     Clientes Paco
                   </p>
-                  <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/80 lg:text-[16px]">
+                  <p className="m-0 text-pretty font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/80 lg:text-[16px]">
                     Seu benefício agora vai além. Além dos produtos que você já
                     assina, você passa a ter gratuitamente acesso a um clube
                     completo de benefícios.
@@ -1578,7 +1578,7 @@ export default function App() {
                   <p className="m-0 mb-3 min-h-[58px] font-sans text-[clamp(1.125rem,2vw,1.5rem)] font-bold leading-[120%] text-white lg:text-[24px]">
                     Colaborador Paco
                   </p>
-                  <p className="m-0 font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/90 lg:text-[16px]">
+                  <p className="m-0 text-pretty font-sans text-[clamp(0.875rem,1.5vw,1rem)] font-light leading-[160%] text-white/90 lg:text-[16px]">
                     Como colaborador, basta ativar seu cadastro para aproveitar um clube completo de vantagens pensado para você.
                   </p>
                 </div>
